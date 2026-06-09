@@ -93,7 +93,7 @@ export default function ProjectDetailPage() {
   return (
     <main className="relative min-h-screen bg-black">
       {/* Fixed background covering entire page */}
-      <div className="fixed inset-0 bg-black/80" />
+      <div className="fixed inset-0 bg-black/90" />
       <div
         className="fixed inset-0"
         style={{
@@ -108,7 +108,7 @@ export default function ProjectDetailPage() {
         }}
       />
       {/* Fixed gradient overlay */}
-      <div className="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+      <div className="fixed inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/90" />
 
       {/* Top bar */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-5 lg:px-6 py-6">
