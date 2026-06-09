@@ -114,19 +114,19 @@ export default function ProjectDetailPage() {
     <main className={`relative min-h-screen ${dark ? "bg-black" : "bg-white"}`}>
       {/* Fixed background covering entire page */}
       <div className="fixed inset-0" style={{ backgroundColor: dark ? "rgba(0,0,0,0.92)" : "rgba(255,255,255,0.97)" }} />
-      <div
-        className="fixed inset-0"
-        style={{
-          backgroundImage: "url('https://res.cloudinary.com/djdbcoyot/image/upload/v1779492891/tvchvy2zbigbduggdlmi.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "fixed",
-          filter: "blur(4px)",
-          opacity: dark ? 0.25 : 0.5,
-          transform: "scale(1.05)",
-        }}
-      />
+      {/* Optimized background image */}
+      <div className="fixed inset-0 overflow-hidden" style={{ filter: "blur(4px)", opacity: dark ? 0.25 : 0.5, transform: "scale(1.05)" }}>
+        <Image
+          src={optimizeCloudinaryUrl("https://res.cloudinary.com/djdbcoyot/image/upload/v1779492891/tvchvy2zbigbduggdlmi.jpg", 1920)}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+          priority
+          placeholder="blur"
+          blurDataURL={getCloudinaryBlurUrl("https://res.cloudinary.com/djdbcoyot/image/upload/v1779492891/tvchvy2zbigbduggdlmi.jpg")}
+        />
+      </div>
       {/* Fixed gradient overlay */}
       <div className={`fixed inset-0 bg-gradient-to-b ${dark ? "from-black/85 via-black/75 to-black/95" : "from-white/85 via-white/70 to-white/95"}`} />
 
