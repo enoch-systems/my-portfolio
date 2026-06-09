@@ -229,7 +229,7 @@ export default function ProjectDetailPage() {
               </div>
               <div className="lg:col-span-2 lg:order-1 p-4 md:p-5">
                 <div className="space-y-4">
-                  <div className={`text-xs ${dark ? "text-white/40" : "text-slate-600"} space-y-1`}>
+                  <div className={`text-xs ${dark ? "text-white" : "text-slate-600"} space-y-1`}>
                     <div className="flex items-center gap-2">
                       <div className={`w-1 h-1 rounded-full ${dark ? "bg-emerald-400" : "bg-emerald-600"}`} />
                       Last updated {(() => {
@@ -252,6 +252,22 @@ export default function ProjectDetailPage() {
                       })()}
                     </div>
                   </div>
+                  {/* View Project button */}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`group inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-300 ${
+                        dark
+                          ? "border-white/15 bg-white/[0.07] text-white/80 hover:bg-white/[0.12]"
+                          : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100 shadow-sm"
+                      }`}
+                    >
+                      <ExternalLink className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      View Project
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
