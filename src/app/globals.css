@@ -1,0 +1,206 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-slide-in-left: slide-in-left 0.9s ease-out;
+  --animate-slide-in-right: slide-in-right 0.9s ease-out;
+  --animate-fade-in-center: fade-in-center 0.9s ease-out;
+  --spacing-15: 3.75rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+
+html::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+
+html {
+  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  @apply min-h-full bg-white text-slate-950 antialiased;
+  background-image: none;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(#ffffff 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: 0.16;
+  z-index: -1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+img,
+svg {
+  display: block;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-100vw);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(100vw);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in-center {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spin-slow-delayed {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-spin-slow-delayed {
+  animation: spin-slow-delayed 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.animate-spin-slow-delayed.active {
+  opacity: 1;
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    text-shadow: 0 0 4px rgba(52, 211, 153, 0.3);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px rgba(52, 211, 153, 0.7), 0 0 24px rgba(52, 211, 153, 0.3);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Always show scrollbar on mobile (iOS/Android) for overflow-x-scroll containers */
+.scrollbar-always-visible {
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #ffffff #a3a3a3 !important;
+}
+
+.scrollbar-always-visible::-webkit-scrollbar {
+  height: 6px !important;
+  display: block !important;
+  -webkit-appearance: auto !important;
+}
+
+.scrollbar-always-visible::-webkit-scrollbar-track {
+  background: #a3a3a3 !important;
+  border-radius: 3px !important;
+}
+
+.scrollbar-always-visible::-webkit-scrollbar-thumb {
+  background: #ffffff !important;
+  border-radius: 3px !important;
+}
+
+/* Ensure horizontal scrollbar container always shows scroll indicator */
+.scrollbar-always-visible {
+  overflow-x: scroll !important;
+}
