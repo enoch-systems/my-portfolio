@@ -111,7 +111,7 @@ export default function ProjectDetailPage() {
       <div className="fixed inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
 
       {/* Top bar */}
-      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-8 lg:px-10 py-6">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-5 lg:px-6 py-6">
         <button
           onClick={() => goBackToProjects(router, projectTab)}
           className="group inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white transition-all duration-200 cursor-pointer"
@@ -121,7 +121,7 @@ export default function ProjectDetailPage() {
         </button>
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 sm:px-8 lg:px-10 pb-32">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-5 lg:px-6 pb-32">
 
         {/* Divider */}
         <div className="mb-16 border-t border-white/[0.08]" />
