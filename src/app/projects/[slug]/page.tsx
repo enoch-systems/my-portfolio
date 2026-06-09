@@ -135,7 +135,7 @@ export default function ProjectDetailPage() {
             <h1 className="text-3xl md:text-4xl font-medium text-white">
               {project.name}
             </h1>
-            <p className="text-sm text-white/60 leading-relaxed">
+            <p className="text-sm text-white/60 leading-relaxed whitespace-pre-wrap">
               {project.about || project.problem}
             </p>
           </div>
@@ -203,13 +203,13 @@ export default function ProjectDetailPage() {
               <div className="lg:col-span-3 space-y-6">
                 <div>
                   <h2 className="text-lg font-medium text-white mb-4">Problem</h2>
-                  <p className="text-sm text-white/60 leading-relaxed">
+                  <p className="text-sm text-white/60 leading-relaxed whitespace-pre-wrap">
                     {project.problem}
                   </p>
                 </div>
                 <div className="border-t border-white/[0.08] pt-6">
                   <h2 className="text-lg font-medium text-white mb-4">Approach</h2>
-                  <p className="text-sm text-white/60 leading-relaxed">
+                  <p className="text-sm text-white/60 leading-relaxed whitespace-pre-wrap">
                     {project.approach}
                   </p>
                 </div>
