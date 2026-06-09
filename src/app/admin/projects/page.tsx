@@ -371,9 +371,9 @@ export default function AdminProjectsPage() {
 
               <Textarea label="About" placeholder="A longer description shown on the project detail page..." value={form.about} onChange={(v) => setForm({ ...form, about: v || null })} hint="Optional - shown in the header of the project detail page" rows={3} />
 
-              <Textarea label="Problem" placeholder="What problem does this project solve?" value={form.problem} onChange={(v) => setForm({ ...form, problem: v })} hint="Shown in the Problem section on the project detail page" rows={3} />
+              <Textarea label="Problem" placeholder="What problem does this project solve?" value={form.problem} onChange={(v) => setForm({ ...form, problem: v })} hint="Shown in the Problem section on the project detail page" rows={10} />
 
-              <Textarea label="Approach" placeholder="How was the problem solved?" value={form.approach} onChange={(v) => setForm({ ...form, approach: v })} hint="Shown in the Approach section on the project detail page" rows={3} />
+              <Textarea label="Approach" placeholder="How was the problem solved?" value={form.approach} onChange={(v) => setForm({ ...form, approach: v })} hint="Shown in the Approach section on the project detail page" rows={10} />
 
               <div className="flex items-center justify-end gap-3 pt-2 border-t dark:border-gray-800">
                 <button type="button" onClick={() => setShowForm(false)} className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
