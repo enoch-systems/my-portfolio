@@ -60,7 +60,7 @@ export default function ProjectDetailPage() {
   if (loading) {
     return (
       <main className={`relative min-h-screen ${dark ? "bg-black" : "bg-white"} flex items-center justify-center`}>
-        <div className={dark ? "text-white/60 text-sm" : "text-slate-600 text-sm"}>Loading project...</div>
+        <div className={dark ? "text-white/60 text-sm" : "text-slate-800 text-sm font-medium"}>Loading project...</div>
       </main>
     );
   }
@@ -85,12 +85,12 @@ export default function ProjectDetailPage() {
         <div className={`fixed inset-0 bg-gradient-to-b ${dark ? "from-black/80 via-black/60 to-black/90" : "from-white/80 via-white/60 to-white/90"}`} />
         <div className="relative z-10 text-center px-6">
           <div className={`w-16 h-16 mx-auto mb-6 rounded-2xl ${dark ? "bg-white/[0.08]" : "bg-black/[0.06]"} flex items-center justify-center`}>
-            <Monitor className={`w-7 h-7 ${dark ? "text-white/40" : "text-slate-500"}`} />
+            <Monitor className={`w-7 h-7 ${dark ? "text-white/40" : "text-slate-600"}`} />
           </div>
-          <h1 className={`text-4xl font-normal tracking-tight ${dark ? "text-white" : "text-slate-800"} mb-3`}>
+          <h1 className={`text-4xl font-normal tracking-tight ${dark ? "text-white" : "text-slate-900"} mb-3`}>
             Project Not Found
           </h1>
-          <p className={`${dark ? "text-white/60" : "text-slate-500"} mb-8 text-base leading-relaxed max-w-md mx-auto`}>
+          <p className={`${dark ? "text-white/60" : "text-slate-700"} mb-8 text-base leading-relaxed max-w-md mx-auto`}>
             The project you are looking for does not exist or has been removed.
           </p>
           <button
@@ -134,7 +134,7 @@ export default function ProjectDetailPage() {
         <div className="flex items-center justify-between">
           <button
             onClick={() => goBackToProjects(router, projectTab)}
-            className={`group inline-flex items-center gap-1.5 text-sm ${dark ? "text-white/50 hover:text-white" : "text-slate-500 hover:text-slate-800"} transition-all duration-200 cursor-pointer`}
+            className={`group inline-flex items-center gap-1.5 text-sm ${dark ? "text-white/50 hover:text-white" : "text-slate-600 hover:text-slate-900"} transition-all duration-200 cursor-pointer`}
           >
             <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-200 group-hover:-translate-x-0.5" />
             Back to Projects
@@ -145,7 +145,7 @@ export default function ProjectDetailPage() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-5 lg:px-6 pb-32">
 
         {/* Divider */}
-        <div className="mb-16 border-t" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)" }} />
+        <div className="mb-16 border-t" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)" }} />
 
         {/* Dark mode toggle + Project header */}
         <div className="max-w-4xl mx-auto mb-12">
@@ -156,7 +156,7 @@ export default function ProjectDetailPage() {
               className={`inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-300 cursor-pointer shadow-sm ${
                 dark
                   ? "border-white/15 bg-white/[0.07] text-white/70 hover:bg-white/[0.12]"
-                  : "border-slate-300 bg-white text-slate-600 hover:bg-slate-100"
+                  : "border-slate-300 bg-white text-slate-700 hover:bg-slate-100"
               }`}
             >
               {dark ? (
@@ -175,13 +175,13 @@ export default function ProjectDetailPage() {
 
           {/* Project header */}
           <div className="space-y-4">
-            <p className={`text-[11px] font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-500"} uppercase`}>
+            <p className={`text-[11px] font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-600"} uppercase`}>
               About the project
             </p>
-            <h1 className={`text-3xl md:text-4xl font-medium ${dark ? "text-white" : "text-slate-800"}`}>
+            <h1 className={`text-3xl md:text-4xl font-medium ${dark ? "text-white" : "text-slate-900"}`}>
               {project.name}
             </h1>
-            <p className={`text-sm leading-relaxed whitespace-pre-wrap ${dark ? "text-white/60" : "text-slate-500"}`}>
+            <p className={`text-sm leading-relaxed whitespace-pre-wrap ${dark ? "text-white/60" : "text-slate-700"}`}>
               {project.about || project.problem}
             </p>
           </div>
@@ -191,8 +191,8 @@ export default function ProjectDetailPage() {
         <div
           className="max-w-4xl mx-auto mb-24 rounded-2xl border overflow-hidden shadow-sm"
           style={{
-            borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)",
-            backgroundColor: dark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.85)",
+            borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)",
+            backgroundColor: dark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.92)",
             backdropFilter: dark ? "blur(24px)" : "none",
           }}
         >
@@ -216,12 +216,12 @@ export default function ProjectDetailPage() {
                     className="relative w-full aspect-[8/5] rounded-xl overflow-hidden flex items-center justify-center"
                     style={{
                       backgroundColor: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.03)",
-                      borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)",
+                      borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)",
                       borderWidth: 1,
                       borderStyle: "solid",
                     }}
                   >
-                    <svg className={`w-12 h-12 ${dark ? "text-white/20" : "text-slate-300"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                    <svg className={`w-12 h-12 ${dark ? "text-white/20" : "text-slate-500"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                   </div>
@@ -229,7 +229,7 @@ export default function ProjectDetailPage() {
               </div>
               <div className="lg:col-span-2 lg:order-1 p-4 md:p-5">
                 <div className="space-y-4">
-                  <div className={`text-xs ${dark ? "text-white/40" : "text-slate-500"} space-y-1`}>
+                  <div className={`text-xs ${dark ? "text-white/40" : "text-slate-600"} space-y-1`}>
                     <div className="flex items-center gap-2">
                       <div className={`w-1 h-1 rounded-full ${dark ? "bg-emerald-400" : "bg-emerald-600"}`} />
                       Last updated {(() => {
@@ -257,26 +257,26 @@ export default function ProjectDetailPage() {
             </div>
 
             {/* Divider */}
-            <div className="border-t" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)" }} />
+            <div className="border-t" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)" }} />
 
             {/* Problem Solved + Approach + Details in one grid */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
               <div className="lg:col-span-3 space-y-6">
                 <div>
-                  <h2 className={`text-lg font-medium ${dark ? "text-white" : "text-slate-800"} mb-4`}>Problem</h2>
-                  <p className={`text-sm leading-relaxed whitespace-pre-wrap ${dark ? "text-white/60" : "text-slate-600"}`}>
+                  <h2 className={`text-lg font-medium ${dark ? "text-white" : "text-slate-900"} mb-4`}>Problem</h2>
+                  <p className={`text-sm leading-relaxed whitespace-pre-wrap ${dark ? "text-white/60" : "text-slate-800"}`}>
                     {project.problem}
                   </p>
                 </div>
-                <div className="border-t pt-6" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)" }}>
-                  <h2 className={`text-lg font-medium ${dark ? "text-white" : "text-slate-800"} mb-4`}>Approach</h2>
-                  <p className={`text-sm leading-relaxed whitespace-pre-wrap ${dark ? "text-white/60" : "text-slate-600"}`}>
+                <div className="border-t pt-6" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)" }}>
+                  <h2 className={`text-lg font-medium ${dark ? "text-white" : "text-slate-900"} mb-4`}>Approach</h2>
+                  <p className={`text-sm leading-relaxed whitespace-pre-wrap ${dark ? "text-white/60" : "text-slate-800"}`}>
                     {project.approach}
                   </p>
                 </div>
                 {/* GitHub link below Approach */}
                 {project.githubUrl && (
-                  <div className="border-t pt-6" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)" }}>
+                  <div className="border-t pt-6" style={{ borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)" }}>
                     <a
                       href={project.githubUrl}
                       target="_blank"
@@ -299,20 +299,20 @@ export default function ProjectDetailPage() {
                   className="rounded-2xl border p-5 md:p-6"
                   style={{
                     backgroundColor: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.03)",
-                    borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.1)",
+                    borderColor: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.15)",
                   }}
                 >
-                  <h3 className={`text-xs font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-500"} uppercase mb-4`}>
+                  <h3 className={`text-xs font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-600"} uppercase mb-4`}>
                     Details
                   </h3>
                   <div className="space-y-4">
                     <div>
-                      <p className={`text-[11px] font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-500"} uppercase mb-1`}>Category</p>
-                      <p className={`text-sm ${dark ? "text-white/80" : "text-slate-700"}`}>{project.category}</p>
+                      <p className={`text-[11px] font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-600"} uppercase mb-1`}>Category</p>
+                      <p className={`text-sm font-medium ${dark ? "text-white/80" : "text-slate-800"}`}>{project.category}</p>
                     </div>
                     <div>
-                      <p className={`text-[11px] font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-500"} uppercase mb-1`}>Platforms</p>
-                      <p className={`text-sm ${dark ? "text-white/80" : "text-slate-700"}`}>{project.platforms}</p>
+                      <p className={`text-[11px] font-mono tracking-wider ${dark ? "text-white/40" : "text-slate-600"} uppercase mb-1`}>Platforms</p>
+                      <p className={`text-sm font-medium ${dark ? "text-white/80" : "text-slate-800"}`}>{project.platforms}</p>
                     </div>
                   </div>
                 </div>
