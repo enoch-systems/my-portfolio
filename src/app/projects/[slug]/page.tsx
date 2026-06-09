@@ -8,6 +8,7 @@ import {
   fetchProjectsByType,
   type Project,
 } from "@/lib/data";
+import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
 import { ArrowLeft, ExternalLink, ArrowUpRight, Monitor, Clock, Moon, Sun } from "lucide-react";
 
 function goBackToProjects(router: ReturnType<typeof useRouter>, tab: string) {
@@ -203,11 +204,13 @@ export default function ProjectDetailPage() {
                 {project.image ? (
                   <div className="relative w-full aspect-[8/5] rounded-xl overflow-hidden">
                     <Image
-                      src={project.image}
+                      src={optimizeCloudinaryUrl(project.image, 800)}
                       alt={project.name}
                       fill
                       sizes="(max-width: 1024px) 100vw, 60vw"
                       className="w-full h-full object-cover"
+                      placeholder="blur"
+                      blurDataURL={getCloudinaryBlurUrl(project.image)}
                     />
                     <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/[0.18] to-transparent pointer-events-none" />
                   </div>

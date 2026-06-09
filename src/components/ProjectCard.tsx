@@ -1,14 +1,17 @@
 import Image from "next/image";
+import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
 
 export default function ProjectCard({ project }: { project: any }) {
   return (
     <div className="group rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
       <div className="aspect-video w-full bg-slate-100 overflow-hidden">
         <Image
-          src={project.image}
+          src={optimizeCloudinaryUrl(project.image, 400)}
           alt={project.title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
+          placeholder="blur"
+          blurDataURL={getCloudinaryBlurUrl(project.image)}
         />
       </div>
       <div className="p-6">

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { fetchProjectsByType, type Project } from "@/lib/data";
+import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
 import ProjectModal from "./ProjectModal";
 
 const PER_PAGE = 4;
@@ -133,11 +134,13 @@ export default function Projects() {
                       {project.image ? (
                         <div className="relative w-full aspect-[8/5] rounded-xl overflow-hidden">
                           <Image
-                            src={project.image}
+                            src={optimizeCloudinaryUrl(project.image, 600)}
                             alt={project.name}
                             fill
                             sizes="(max-width: 768px) 100vw, 60vw"
                             className="w-full h-full object-cover"
+                            placeholder="blur"
+                            blurDataURL={getCloudinaryBlurUrl(project.image)}
                           />
                           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/[0.18] to-transparent pointer-events-none" />
                         </div>
