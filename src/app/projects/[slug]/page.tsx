@@ -229,8 +229,8 @@ export default function ProjectDetailPage() {
               </div>
               <div className="lg:col-span-2 lg:order-1 p-4 md:p-5">
                 <div className="space-y-4">
-                  <div className={`text-xs ${dark ? "text-white" : "text-slate-600"} space-y-1`}>
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1">
+                    <div className={`text-xs ${dark ? "text-white" : "text-slate-600"} flex items-center gap-2`}>
                       <div className={`w-1 h-1 rounded-full ${dark ? "bg-emerald-400" : "bg-emerald-600"}`} />
                       Last updated {(() => {
                         const date = project.updatedAt || project.createdAt;
@@ -242,7 +242,7 @@ export default function ProjectDetailPage() {
                         return `${month} ${day}, ${year}`;
                       })()}
                     </div>
-                    <div className="flex items-center gap-1.5 pl-2.5">
+                    <div className={`text-xs ${dark ? "text-white/40" : "text-slate-500"} flex items-center gap-1.5 pl-2.5`}>
                       <Clock className="w-3 h-3" />
                       {(() => {
                         const date = project.updatedAt || project.createdAt;
