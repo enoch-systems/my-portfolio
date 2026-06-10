@@ -252,3 +252,47 @@ button, input, textarea, select {
 .scrollbar-always-visible {
   overflow-x: scroll !important;
 }
+
+/* Loader spinner for contact form */
+.loader {
+  width: 20px;
+  aspect-ratio: 1;
+  position: relative;
+  animation: l13-0 2s linear infinite;
+}
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(at 30% 30%,#0000,#000a) red;
+  animation: l13-1 0.5s cubic-bezier(.5,-500,.5,500) infinite;
+}
+.loader::after {
+  animation-delay: -0.15s;
+}
+@keyframes l13-0 { 
+  100% { transform:rotate(360deg)} 
+}
+@keyframes l13-1 { 
+  100% { transform:translate(0.5px)} 
+}
+
+/* Success checkmark circle animation */
+@keyframes success-circle {
+  from {
+    stroke-dashoffset: 138;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes success-check {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}

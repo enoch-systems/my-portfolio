@@ -6,6 +6,8 @@ import { personalData } from "@/lib/data";
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });
   const [isMobile, setIsMobile] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     setIsMobile(/Mobi|Android|iPhone|iPad/i.test(navigator?.userAgent || ""));
@@ -17,6 +19,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSending(true);
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -25,15 +28,15 @@ export default function Contact() {
       });
 
       if (!res.ok) {
-        const err = await res.json();
-        alert(err.error || "Failed to send message.");
+        setIsSending(false);
         return;
       }
 
-      alert("Message sent! I'll get back to you soon.");
+      setIsSending(false);
+      setShowSuccess(true);
       setForm({ name: "", email: "", mobile: "", message: "" });
     } catch {
-      alert("Network error. Please try again.");
+      setIsSending(false);
     }
   };
 
@@ -362,6 +365,59 @@ export default function Contact() {
           </div>
         </div>
       </div>
+
+      {/* Sending overlay */}
+      {isSending && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/70">
+          <div className="loader mb-6" />
+          <p className="text-white/70 text-sm font-mono tracking-[0.2em] uppercase animate-pulse">
+            Sending...
+          </p>
+        </div>
+      )}
+
+      {/* Success overlay */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/70">
+          <div className="mb-6 relative flex items-center justify-center w-20 h-20">
+            {/* Checkmark circle animation */}
+            <svg className="w-20 h-20" viewBox="0 0 52 52">
+              <circle
+                className="fill-none stroke-[#22c55e] stroke-[5] origin-center"
+                cx="26"
+                cy="26"
+                r="22"
+                style={{
+                  strokeDasharray: 138,
+                  strokeDashoffset: 0,
+                  animation: "success-circle 0.6s ease-in-out forwards",
+                }}
+              />
+              <path
+                className="fill-none stroke-[#22c55e] stroke-[5] stroke-linecap-round stroke-linejoin-round"
+                d="M14 27l7 7 16-16"
+                style={{
+                  strokeDasharray: 40,
+                  strokeDashoffset: 40,
+                  animation: "success-check 0.4s ease-in-out 0.4s forwards",
+                }}
+              />
+            </svg>
+          </div>
+          <p className="text-white text-lg font-medium mb-2">
+            We'll get back to you soon!
+          </p>
+          <p className="text-white/50 text-sm font-mono tracking-[0.15em] mb-8">
+            Thank you for reaching out
+          </p>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="px-8 py-3 rounded-full border border-white/20 bg-white/10 text-white/80 hover:bg-white hover:text-black hover:border-white transition-all duration-200 text-sm font-medium cursor-pointer"
+          >
+            Close
+          </button>
+        </div>
+      )}
     </section>
   );
 }
