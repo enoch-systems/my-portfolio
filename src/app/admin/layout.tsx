@@ -14,7 +14,10 @@ import {
   LayoutDashboard,
   AlertTriangle,
   X,
+  Clock,
 } from "lucide-react";
+import { getTimeFormat, setTimeFormat } from "@/lib/settings";
+import type { TimeFormat } from "@/lib/settings";
 
 // Theme context
 const ThemeContext = createContext<{
@@ -81,12 +84,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [timeFormat, setTimeFormatState] = useState<TimeFormat>("24h");
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("admin-theme") as "light" | "dark" | null;
     if (saved) setTheme(saved);
+    setTimeFormatState(getTimeFormat());
   }, []);
 
   useEffect(() => {
@@ -121,6 +126,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   };
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+  const toggleTimeFormat = () => {
+    const next: TimeFormat = timeFormat === "12h" ? "24h" : "12h";
+    setTimeFormat(next);
+    setTimeFormatState(next);
+  };
 
   if (loading) {
     return (
@@ -287,6 +297,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
 
               <div className="flex items-center gap-2">
+                {/* Time format toggle */}
+                <button
+                  onClick={toggleTimeFormat}
+                  className={`px-2 py-1.5 rounded-lg text-xs font-mono transition-colors cursor-pointer flex items-center gap-1.5 ${
+                    theme === "dark" ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"
+                  }`}
+                  title={timeFormat === "12h" ? "Switch to 24-hour format" : "Switch to 12-hour format"}
+                >
+                  <Clock className="w-3.5 h-3.5" />
+                  {timeFormat === "12h" ? "12h" : "24h"}
+                </button>
+
                 {/* Theme toggle */}
                 <button
                   onClick={toggleTheme}

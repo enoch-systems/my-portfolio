@@ -6,6 +6,7 @@ import type { JournalEntryRow } from "@/lib/data";
 import { ArrowUpRight, Clock } from "lucide-react";
 import Link from "next/link";
 import JournalModal from "./JournalModal";
+import { getTimeFormat } from "@/lib/settings";
 
 const categoryStyles: Record<string, { label: string; color: string }> = {
   shipped: { label: "shipped", color: "border-black bg-black text-white" },
@@ -17,7 +18,8 @@ const categoryStyles: Record<string, { label: string; color: string }> = {
 function formatPublished(publishedAt: string): { date: string; time: string; day: string } {
   const d = new Date(publishedAt);
   const date = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-  const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false });
+  const hour12 = getTimeFormat() === "12h";
+  const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12 });
   const day = d.toLocaleDateString("en-US", { weekday: "long" });
   return { date, time, day };
 }
