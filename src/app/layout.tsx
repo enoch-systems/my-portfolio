@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import LenisProvider from "@/components/LenisProvider";
+import QueryProvider from "@/components/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Enoch Chukwudi - Fullstack Engineer (Backend-Focused)",
@@ -50,7 +51,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <LenisProvider>
-          {children}
+          <QueryProvider>
+            {children}
+          </QueryProvider>
         </LenisProvider>
       </body>
     </html>

@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { fetchProjectsByType, type Project } from "@/lib/data";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllProjects, type Project } from "@/lib/data";
 import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
 import ProjectModal from "./ProjectModal";
 
@@ -16,21 +17,25 @@ export default function Projects() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
 
-  // Fetch projects when tab changes
+  // Fetch all 3 project types at once — cached by React Query
+  const { data: allProjects, isLoading } = useQuery({
+    queryKey: ["all-projects"],
+    queryFn: fetchAllProjects,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  // Get current tab's projects from cache (instant, no network)
+  const projects = allProjects ? allProjects[tab] : [];
+  const totalPages = Math.ceil(projects.length / PER_PAGE);
+  const paginatedProjects = projects.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  // Reset page when tab changes
   useEffect(() => {
-    setLoading(true);
     setPage(1);
-    fetchProjectsByType(tab).then((data) => {
-      setProjects(data);
-      setTotalPages(Math.ceil(data.length / PER_PAGE));
-      setLoading(false);
-    });
   }, [tab]);
 
+  // Intersection observer for entrance animations
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -46,8 +51,6 @@ export default function Projects() {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
-  const paginatedProjects = projects.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
   const switchTab = (t: "engineering" | "client" | "research") => {
     setTab(t);
@@ -111,7 +114,7 @@ export default function Projects() {
         </div>
 
         {/* Loading state */}
-        {loading ? (
+        {isLoading ? (
           <div className="text-center text-white/30 text-sm py-20">Loading projects...</div>
         ) : (
           <>
