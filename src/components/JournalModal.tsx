@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { X, Clock } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { X, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import type { JournalEntryRow } from "@/lib/data";
 import { getTimeFormat } from "@/lib/settings";
 
@@ -27,6 +27,8 @@ function formatPublished(publishedAt: string): { date: string; time: string; day
 }
 
 export default function JournalModal({ entry, onClose }: JournalModalProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
+
   // Prevent body scroll when modal is open
   useEffect(() => {
     if (entry) {
@@ -47,6 +49,16 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
+
+  const scrollContent = (direction: "up" | "down") => {
+    if (contentRef.current) {
+      const amount = 200;
+      contentRef.current.scrollBy({
+        top: direction === "down" ? amount : -amount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   if (!entry) return null;
 
@@ -109,21 +121,39 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
           <div className="h-px bg-neutral-200 mb-5" />
 
           {/* Full content — scrollable area */}
-          <div className="mb-5 max-h-[40vh] overflow-y-auto pr-1">
-            <p className="text-[10px] md:text-xs font-semibold font-mono uppercase tracking-[0.15em] text-black mb-2">
-              Full Entry
-            </p>
-            <div className="text-xs md:text-sm text-neutral-900 leading-relaxed whitespace-pre-line">
-              {entry.content}
+          <div className="relative">
+            <div
+              ref={contentRef}
+              className="mb-5 max-h-[50vh] overflow-y-auto pr-2 scroll-smooth"
+              style={{ scrollbarWidth: "thin" }}
+            >
+              <p className="text-[10px] md:text-xs font-semibold font-mono uppercase tracking-[0.15em] text-black mb-2">
+                Full Entry
+              </p>
+              <div className="text-xs md:text-sm text-neutral-900 leading-relaxed whitespace-pre-line">
+                {entry.content}
+              </div>
             </div>
-          </div>
 
-          {/* Swipe hint — decorative, no action */}
-          <div className="w-full flex items-center justify-center gap-1.5 py-3 text-[11px] md:text-xs font-medium text-black border-t border-neutral-200 mt-auto select-none">
-            Swipe to scroll down
-            <svg className="w-3.5 h-3.5 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
+            {/* Scroll buttons */}
+            <div className="flex items-center justify-center gap-3 py-2 border-t border-neutral-200">
+              <button
+                onClick={() => scrollContent("up")}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-medium text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-all duration-200 cursor-pointer"
+                title="Scroll up"
+              >
+                <ChevronUp className="w-3.5 h-3.5" />
+                Scroll up
+              </button>
+              <button
+                onClick={() => scrollContent("down")}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-medium text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-all duration-200 cursor-pointer"
+                title="Scroll down"
+              >
+                Scroll down
+                <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
