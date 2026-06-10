@@ -71,7 +71,7 @@ function JournalCard({ entry, index, visible, isLatest, number, onSelect }: { en
           {entry.title}
         </h3>
         <p className="text-[9px] sm:text-[10px] md:text-[11px] lg:text-sm text-neutral-600 leading-relaxed mb-1 sm:mb-1.5 md:mb-2 lg:mb-3">
-          {truncate(entry.summary, 6)}
+          {truncate(entry.content, 30)}
         </p>
         <p className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs font-mono mb-2 sm:mb-2.5 md:mb-3 lg:mb-5 pb-10 lg:pb-15 mt-2 sm:mt-2 md:mt-3 lg:mt-4 text-black">
           - Enoch Chukwudi
