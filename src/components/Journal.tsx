@@ -65,8 +65,11 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, tota
             {entry.title}
           </h3>
           {/* Content preview */}
-          <p className="text-xs text-neutral-600 leading-relaxed mb-4 line-clamp-5">
+          <p className="text-xs text-neutral-600 leading-relaxed mb-2 line-clamp-5">
             {truncate(entry.content, 28)}
+          </p>
+          <p className="text-[10px] font-mono mb-4 text-black">
+            - Enoch Chukwudi
           </p>
           {/* Spacer + Read more */}
           <div className="mt-auto border-t border-neutral-100 pt-3">
