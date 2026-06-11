@@ -119,14 +119,15 @@ export default function AdminJournalPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    // Auto-set date and published_at to current time
     const now = new Date();
     const today = now.toISOString().split("T")[0];
-    const payload = { ...form, date: today, published_at: now.toISOString() };
     if (editingId) {
-      await supabase.from("journal_entries").update(payload).eq("id", editingId);
+      // Update: keep original published_at, only update other fields. DB trigger auto-sets updated_at.
+      const { published_at, ...rest } = form;
+      await supabase.from("journal_entries").update({ ...rest, date: today }).eq("id", editingId);
     } else {
-      await supabase.from("journal_entries").insert(payload);
+      // Create: auto-set date and published_at to current time
+      await supabase.from("journal_entries").insert({ ...form, date: today, published_at: now.toISOString() });
     }
     setSaving(false);
     setShowForm(false);
