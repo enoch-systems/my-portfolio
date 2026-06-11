@@ -203,7 +203,9 @@ export default function AdminProjectsPage() {
         </div>
         <select value={filterType} onChange={(e) => setFilterType(e.target.value)}
           className={`px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
-            theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
+            theme === "dark"
+              ? "bg-gray-800 text-white border border-gray-700 [&>option]:bg-gray-800 [&>option]:text-white"
+              : "bg-white text-gray-900 border border-gray-200"
           }`}
         >
           <option value="all">All Types</option>
@@ -230,13 +232,6 @@ export default function AdminProjectsPage() {
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                  theme === "dark" ? "bg-white/10" : "bg-gray-100"
-                }`}>
-                  <span className={`text-xs font-bold ${typeColors[p.category_type].split(" ")[1]}`}>
-                    {p.category_type === "engineering" ? "E" : p.category_type === "client" ? "C" : "R"}
-                  </span>
-                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className={`text-sm font-semibold truncate ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
@@ -306,9 +301,10 @@ export default function AdminProjectsPage() {
                   <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Category Type <span className="text-red-500">*</span></label>
                   <select value={form.category_type} onChange={(e) => setForm({ ...form, category_type: e.target.value as any })}
                     className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
-                      theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
+                      theme === "dark"
+                        ? "bg-gray-800 text-white border border-gray-700 [&>option]:bg-gray-800 [&>option]:text-white"
+                        : "bg-white text-gray-900 border border-gray-200"
                     }`}
-                    style={theme === "dark" ? { colorScheme: "dark" } : undefined}
                   >
                     <option value="engineering">Engineering Systems</option>
                     <option value="client">Client Systems</option>

@@ -10,10 +10,12 @@ import { getTimeFormat } from "@/lib/settings";
 const PER_PAGE = 8;
 
 const categoryStyles: Record<string, { label: string; color: string }> = {
+  updates: { label: "updates", color: "border-black bg-black text-white" },
+  progress: { label: "progress", color: "border-black bg-black text-white" },
   shipped: { label: "shipped", color: "border-black bg-black text-white" },
-  engineered: { label: "engineered", color: "border-black bg-black text-white" },
-  exploring: { label: "exploring", color: "border-black bg-black text-white" },
-  thinking: { label: "thinking", color: "border-black bg-black text-white" },
+  modification: { label: "modification", color: "border-black bg-black text-white" },
+  research: { label: "research", color: "border-black bg-black text-white" },
+  architecture: { label: "architecture", color: "border-black bg-black text-white" },
 };
 
 function formatPublished(publishedAt: string): { date: string; time: string; day: string } {
@@ -32,7 +34,7 @@ function truncate(text: string, maxWords: number): string {
 }
 
 function JournalCard({ entry, index, visible, isLatest, number, onSelect }: { entry: JournalEntryRow; index: number; visible: boolean; isLatest?: boolean; number: number; onSelect: () => void }) {
-  const cat = categoryStyles[entry.category] || categoryStyles.shipped;
+  const cat = categoryStyles[entry.category] || categoryStyles.updates;
   const pub = formatPublished(entry.published_at);
   return (
     <div

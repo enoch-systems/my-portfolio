@@ -10,7 +10,7 @@ interface JournalEntry {
   date: string;
   published_at: string;
   title: string;
-  category: "shipped" | "engineered" | "exploring" | "thinking";
+  category: "updates" | "progress" | "shipped" | "modification" | "research" | "architecture";
   summary: string;
   content: string;
 }
@@ -18,14 +18,16 @@ interface JournalEntry {
 const defaultForm: Omit<JournalEntry, "id"> = {
   date: new Date().toISOString().split("T")[0],
   published_at: new Date().toISOString(),
-  title: "", category: "shipped", summary: "", content: "",
+  title: "", category: "updates", summary: "", content: "",
 };
 
 const categoryColors: Record<string, string> = {
-  shipped: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400",
-  engineered: "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400",
-  exploring: "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400",
-  thinking: "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400",
+  updates: "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400",
+  progress: "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400",
+  shipped: "bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400",
+  modification: "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400",
+  research: "bg-cyan-100 text-cyan-700 dark:bg-cyan-500/10 dark:text-cyan-400",
+  architecture: "bg-rose-100 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400",
 };
 
 function Input({ label, placeholder, value, onChange, required, hint, type = "text" }: {
@@ -69,11 +71,11 @@ function FullscreenEditor({ open, value, onChange, onClose, label }: {
           ><X className="w-5 h-5" /></button>
         </div>
       </div>
-      <div className="flex-1 flex items-start justify-center p-8 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+      <div className="flex-1 flex items-start justify-center px-3 sm:px-4 md:px-8 py-4 md:py-8 overflow-y-auto bg-gray-50 dark:bg-gray-900">
         <textarea
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
-          className="w-full max-w-3xl h-full min-h-[60vh] p-8 rounded-2xl bg-white dark:bg-white text-gray-900 text-base leading-relaxed focus:outline-none resize-none shadow-sm border border-gray-100"
+          className="w-full max-w-3xl h-full min-h-[60vh] p-3 sm:p-4 md:p-8 rounded-2xl bg-white dark:bg-white text-gray-900 text-base leading-relaxed focus:outline-none resize-none shadow-sm border border-gray-100"
           style={{ whiteSpace: "pre-wrap", lineHeight: "1.8" }}
           placeholder="Start typing..."
         />
@@ -117,10 +119,14 @@ export default function AdminJournalPage() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    // Auto-set date and published_at to current time
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+    const payload = { ...form, date: today, published_at: now.toISOString() };
     if (editingId) {
-      await supabase.from("journal_entries").update(form).eq("id", editingId);
+      await supabase.from("journal_entries").update(payload).eq("id", editingId);
     } else {
-      await supabase.from("journal_entries").insert(form);
+      await supabase.from("journal_entries").insert(payload);
     }
     setSaving(false);
     setShowForm(false);
@@ -187,14 +193,18 @@ export default function AdminJournalPage() {
         </div>
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}
           className={`px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
-            theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
+            theme === "dark"
+              ? "bg-gray-800 text-white border border-gray-700 [&>option]:bg-gray-800 [&>option]:text-white"
+              : "bg-white text-gray-900 border border-gray-200"
           }`}
         >
           <option value="all">All Categories</option>
+          <option value="updates">Updates</option>
+          <option value="progress">Progress</option>
           <option value="shipped">Shipped</option>
-          <option value="engineered">Engineered</option>
-          <option value="exploring">Exploring</option>
-          <option value="thinking">Thinking</option>
+          <option value="modification">Modification</option>
+          <option value="research">Research</option>
+          <option value="architecture">Architecture</option>
         </select>
       </div>
 
@@ -215,13 +225,6 @@ export default function AdminJournalPage() {
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                  theme === "dark" ? "bg-white/10" : "bg-gray-100"
-                }`}>
-                  <span className={`text-xs font-bold ${categoryColors[entry.category].split(" ")[1]}`}>
-                    {entry.category === "shipped" ? "S" : entry.category === "engineered" ? "E" : entry.category === "exploring" ? "X" : "T"}
-                  </span>
-                </div>
                 <div className="flex-1 min-w-0">
                   <span className={`text-sm font-semibold truncate block ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
                     {entry.title}
@@ -230,8 +233,8 @@ export default function AdminJournalPage() {
                     {new Date(entry.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
-                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${categoryColors[entry.category]}`}>
-                      {entry.category}
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${categoryColors[entry.category] || categoryColors.updates}`}>
+                      {entry.category === "updates" ? "Updates" : entry.category === "progress" ? "Progress" : entry.category === "shipped" ? "Shipped" : entry.category === "modification" ? "Modification" : entry.category === "research" ? "Research" : entry.category === "architecture" ? "Architecture" : entry.category}
                     </span>
                   </div>
                 </div>
@@ -276,23 +279,22 @@ export default function AdminJournalPage() {
             <form onSubmit={handleSave} className="space-y-5">
               <Input label="Title" placeholder="e.g. National Logistics Visibility Platform - Phase 2 Deployed" value={form.title} onChange={(v) => setForm({ ...form, title: v })} required hint="A clear, descriptive title for the journal entry" />
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Category <span className="text-red-500">*</span></label>
-                  <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as any })}
-                    className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
-                      theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
-                    }`}
-                    style={theme === "dark" ? { colorScheme: "dark" } : undefined}
-                  >
-                    <option value="shipped">Shipped</option>
-                    <option value="engineered">Engineered</option>
-                    <option value="exploring">Exploring</option>
-                    <option value="thinking">Thinking</option>
-                  </select>
-                </div>
-                <Input label="Date" type="date" placeholder="" value={form.date} onChange={(v) => setForm({ ...form, date: v })} required hint="The date this entry relates to" />
-                <Input label="Published At" type="datetime-local" placeholder="" value={form.published_at.slice(0, 16)} onChange={(v) => setForm({ ...form, published_at: new Date(v).toISOString() })} required hint="When this entry was published" />
+              <div>
+                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Category <span className="text-red-500">*</span></label>
+                <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as any })}
+                  className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
+                    theme === "dark"
+                      ? "bg-gray-800 text-white border border-gray-700 [&>option]:bg-gray-800 [&>option]:text-white"
+                      : "bg-white text-gray-900 border border-gray-200"
+                  }`}
+                >
+                  <option value="updates">Updates</option>
+                  <option value="progress">Progress</option>
+                  <option value="shipped">Shipped</option>
+                  <option value="modification">Modification</option>
+                  <option value="research">Research</option>
+                  <option value="architecture">Architecture</option>
+                </select>
               </div>
 
               {/* Summary - expandable */}

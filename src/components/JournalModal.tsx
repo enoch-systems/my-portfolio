@@ -11,10 +11,12 @@ interface JournalModalProps {
 }
 
 const categoryStyles: Record<string, { label: string; color: string }> = {
+  updates: { label: "updates", color: "border-black bg-black text-white" },
+  progress: { label: "progress", color: "border-black bg-black text-white" },
   shipped: { label: "shipped", color: "border-black bg-black text-white" },
-  engineered: { label: "engineered", color: "border-black bg-black text-white" },
-  exploring: { label: "exploring", color: "border-black bg-black text-white" },
-  thinking: { label: "thinking", color: "border-black bg-black text-white" },
+  modification: { label: "modification", color: "border-black bg-black text-white" },
+  research: { label: "research", color: "border-black bg-black text-white" },
+  architecture: { label: "architecture", color: "border-black bg-black text-white" },
 };
 
 function formatPublished(publishedAt: string): { date: string; time: string; day: string } {
@@ -63,17 +65,37 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
   if (!entry) return null;
 
   // Normalize all escaped/JSON-escaped newlines to real newlines
-  let normalizedContent = entry.content || "";
-  // Keep unescaping until no more escaped \n sequences remain
-  // This handles single \n, double \\n, or quadruple \\\\n escaping
-  while (normalizedContent.includes("\\n")) {
-    normalizedContent = normalizedContent.replace(/\\n/g, "\n");
-  }
-  normalizedContent = normalizedContent.replace(/\r\n/g, "\n");
-  const contentParagraphs = normalizedContent.split("\n").filter(Boolean);
+  const normalizeNewlines = (text: string): string => {
+    let result = text || "";
+    // Keep unescaping until no more escaped \n sequences remain
+    // This handles single \n, double \\n, or quadruple \\\\n escaping
+    while (result.includes("\\n")) {
+      result = result.replace(/\\n/g, "\n");
+    }
+    result = result.replace(/\r\n/g, "\n");
+    return result;
+  };
 
-  const cat = categoryStyles[entry.category] || categoryStyles.shipped;
+  const normalizedContent = normalizeNewlines(entry.content || "");
+  // Preserve empty strings so double/triple line breaks render as blank lines
+  const contentParagraphs = normalizedContent.split("\n");
+
+  const normalizedSummary = normalizeNewlines(entry.summary || "");
+  const summaryParagraphs = normalizedSummary.split("\n");
+
+  const cat = categoryStyles[entry.category] || categoryStyles.updates;
   const pub = formatPublished(entry.published_at);
+
+  // Determine if we should show "last edited" (only if updated_at exists and differs meaningfully from published_at)
+  let edited: { date: string; time: string; day: string } | null = null;
+  if (entry.updated_at) {
+    const pubDate = new Date(entry.published_at).getTime();
+    const updDate = new Date(entry.updated_at).getTime();
+    // Show last edited only if it's more than 2 seconds after published_at (to avoid showing for initial save)
+    if (updDate - pubDate > 2000) {
+      edited = formatPublished(entry.updated_at);
+    }
+  }
 
   return (
     <div
@@ -108,19 +130,32 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
           </div>
 
           {/* Published line — same as card */}
-          <p className="text-[11px] md:text-xs text-black font-mono mb-4 uppercase tracking-wider">
+          <p className="text-[11px] md:text-xs text-black font-mono uppercase tracking-wider">
             Published {pub.day}, {pub.time}
           </p>
+
+          {/* Last edited — shown only when entry has been updated after creation */}
+          {edited && (
+            <p className="text-[10px] md:text-[11px] text-black/40 font-mono mb-4 tracking-wider">
+              Last edited {edited.day}, {edited.time}
+            </p>
+          )}
 
           {/* Title — same bold style */}
           <h3 className="text-sm md:text-base font-bold text-neutral-900 leading-snug mb-3 break-words">
             {entry.title}
           </h3>
 
-          {/* Summary — full text (no truncation) */}
-          <p className="text-xs md:text-sm text-neutral-900 leading-relaxed mb-3">
-            {entry.summary}
-          </p>
+          {/* Summary — full text with preserved line breaks */}
+          <div className="text-xs md:text-sm text-neutral-900 leading-relaxed mb-3">
+            {summaryParagraphs.map((p, i) => (
+              p ? (
+                <p key={i} className="mb-0">{p}</p>
+              ) : (
+                <br key={i} />
+              )
+            ))}
+          </div>
 
           {/* Author — same as card */}
           <p className="text-[10px] md:text-xs font-mono mb-5 text-black">
@@ -140,11 +175,15 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
               <p className="text-[10px] md:text-xs font-semibold font-mono uppercase tracking-[0.15em] text-black mb-2">
                 Full Entry
               </p>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {contentParagraphs.map((p, i) => (
-                  <p key={i} className="text-xs md:text-sm text-neutral-900 leading-relaxed">
-                    {p}
-                  </p>
+                  p ? (
+                    <p key={i} className="text-xs md:text-sm text-neutral-900 leading-relaxed">
+                      {p}
+                    </p>
+                  ) : (
+                    <div key={i} className="h-4" />
+                  )
                 ))}
               </div>
             </div>

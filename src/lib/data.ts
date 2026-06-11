@@ -55,9 +55,10 @@ export interface JournalEntryRow {
   date: string;
   published_at: string;
   title: string;
-  category: "shipped" | "engineered" | "exploring" | "thinking";
+  category: "updates" | "progress" | "shipped" | "modification" | "research" | "architecture";
   summary: string;
   content: string;
+  updated_at?: string;
 }
 
 /** Map a DB row to the Project interface used by components */
