@@ -51,14 +51,15 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, tota
           #{number}
         </span>
         <div className="p-5 flex flex-col h-full">
-          {/* Top row: badge + date + time */}
-          <div className="flex items-center gap-2 mb-3">
+          {/* Top row: badge + date */}
+          <div className="flex items-center gap-2 mb-1">
             <span className={`inline-block text-[11px] font-mono uppercase rounded-full px-2.5 py-1 border ${cat.color}`}>
               {cat.label}
             </span>
             <span className="text-[10px] text-black/60 font-mono">{pub.date}</span>
-            <span className="text-[9px] text-black/40 font-mono ml-auto">{pub.time}</span>
           </div>
+          {/* Time below date */}
+          <p className="text-[9px] text-black/40 font-mono mb-3">{pub.time}</p>
           {/* Title */}
           <h3 className="text-sm font-bold text-neutral-900 leading-snug mb-3 break-words line-clamp-2 pr-6">
             {entry.title}
