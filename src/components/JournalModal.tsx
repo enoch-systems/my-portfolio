@@ -62,6 +62,8 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
 
   if (!entry) return null;
 
+  const contentParagraphs = (entry.content || "").split("\n").filter(Boolean);
+
   const cat = categoryStyles[entry.category] || categoryStyles.shipped;
   const pub = formatPublished(entry.published_at);
 
@@ -130,8 +132,12 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
               <p className="text-[10px] md:text-xs font-semibold font-mono uppercase tracking-[0.15em] text-black mb-2">
                 Full Entry
               </p>
-              <div className="text-xs md:text-sm text-neutral-900 leading-relaxed whitespace-pre-wrap">
-                {entry.content.replace(/\\n/g, "\n")}
+              <div className="space-y-4">
+                {contentParagraphs.map((p, i) => (
+                  <p key={i} className="text-xs md:text-sm text-neutral-900 leading-relaxed">
+                    {p}
+                  </p>
+                ))}
               </div>
             </div>
 
