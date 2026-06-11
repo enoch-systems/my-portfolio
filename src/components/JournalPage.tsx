@@ -37,7 +37,7 @@ function JournalCard({ entry, index, visible, isLatest, number, onSelect }: { en
   return (
     <div
       onClick={onSelect}
-      className={`h-full border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer relative ${
+      className={`h-full min-h-[220px] border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer relative ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
       style={{
