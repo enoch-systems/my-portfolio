@@ -230,11 +230,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         )}
 
         {/* Sidebar */}
-        <aside
+      <aside
           className={`fixed top-0 left-0 z-40 h-full w-64 transform transition-transform duration-200 ease-in-out ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0 border-r ${
-            theme === "dark" ? "bg-gray-900 border-gray-800" : "bg-white border-gray-200"
+          } md:translate-x-0 ${
+            theme === "dark" ? "bg-gray-900" : "bg-white border-r border-gray-200"
           }`}
         >
           <div className="flex flex-col h-full">
