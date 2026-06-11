@@ -19,13 +19,17 @@ const categoryStyles: Record<string, { label: string; color: string }> = {
   architecture: { label: "architecture", color: "border-black bg-black text-white" },
 };
 
-function formatPublished(publishedAt: string): { date: string; time: string; day: string } {
+function formatPublished(publishedAt: string): { date: string; time: string; day: string; shortDate: string } {
   const d = new Date(publishedAt);
   const date = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const hour12 = getTimeFormat() === "12h";
   const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12 });
   const day = d.toLocaleDateString("en-US", { weekday: "long" });
-  return { date, time, day };
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yy = String(d.getFullYear()).slice(-2);
+  const shortDate = `${dd}/${mm}/${yy}`;
+  return { date, time, day, shortDate };
 }
 
 export default function JournalModal({ entry, onClose }: JournalModalProps) {
@@ -87,7 +91,7 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
   const pub = formatPublished(entry.published_at);
 
   // Determine if we should show "last edited" (only if updated_at exists and differs meaningfully from published_at)
-  let edited: { date: string; time: string; day: string } | null = null;
+  let edited: { date: string; time: string; day: string; shortDate: string } | null = null;
   if (entry.updated_at) {
     const pubDate = new Date(entry.published_at).getTime();
     const updDate = new Date(entry.updated_at).getTime();
@@ -137,7 +141,7 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
           {/* Last edited — shown only when entry has been updated after creation */}
           {edited && (
             <p className="text-[10px] md:text-[11px] text-black/40 font-mono mb-4 tracking-wider">
-              Last edited {edited.day}, {edited.time}
+              Last edited {edited.shortDate} &middot; {edited.day}, {edited.time}
             </p>
           )}
 
