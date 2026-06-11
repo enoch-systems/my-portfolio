@@ -58,8 +58,8 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, tota
             </span>
             <span className="text-[10px] text-black/60 font-mono">{pub.date}</span>
           </div>
-          {/* Time below date */}
-          <p className="text-[9px] text-black/40 font-mono mb-3">{pub.time}</p>
+          {/* Day + Time below date */}
+          <p className="text-[9px] text-black/40 font-mono mb-3">{pub.day} &middot; {pub.time}</p>
           {/* Title */}
           <h3 className="text-sm font-bold text-neutral-900 leading-snug mb-3 break-words line-clamp-2 pr-6">
             {entry.title}
