@@ -30,31 +30,37 @@ function truncate(text: string, maxWords: number): string {
   return words.slice(0, maxWords).join(" ") + "...";
 }
 
-function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { entry: JournalEntryRow; index: number; visible: boolean; isLatest?: boolean; onSelect: () => void; isMobile?: boolean }) {
+function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, totalEntries }: { entry: JournalEntryRow; index: number; visible: boolean; isLatest?: boolean; onSelect: () => void; isMobile?: boolean; totalEntries?: number }) {
   const cat = categoryStyles[entry.category] || categoryStyles.shipped;
   const pub = formatPublished(entry.published_at);
 
   if (isMobile) {
     // Compact mobile card for horizontal slide
+    const number = (totalEntries ?? 0) - index;
     return (
       <div
         onClick={onSelect}
-        className="h-full min-h-[320px] border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 cursor-pointer"
+        className="h-full min-h-[320px] border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 cursor-pointer relative"
         style={{
           background: "#ffffff",
           transitionDelay: `${index * 80}ms`,
         }}
       >
+        {/* Number badge */}
+        <span className="absolute top-3 right-3 text-[10px] font-mono text-green-600 font-bold select-none">
+          #{number}
+        </span>
         <div className="p-5 flex flex-col h-full">
-          {/* Top row: badge + date */}
+          {/* Top row: badge + date + time */}
           <div className="flex items-center gap-2 mb-3">
             <span className={`inline-block text-[11px] font-mono uppercase rounded-full px-2.5 py-1 border ${cat.color}`}>
               {cat.label}
             </span>
-            <span className="text-[11px] text-black font-mono">{pub.date}</span>
+            <span className="text-[10px] text-black/60 font-mono">{pub.date}</span>
+            <span className="text-[9px] text-black/40 font-mono ml-auto">{pub.time}</span>
           </div>
           {/* Title */}
-          <h3 className="text-sm font-bold text-neutral-900 leading-snug mb-3 break-words line-clamp-2">
+          <h3 className="text-sm font-bold text-neutral-900 leading-snug mb-3 break-words line-clamp-2 pr-6">
             {entry.title}
           </h3>
           {/* Content preview */}
@@ -76,10 +82,11 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { 
   }
 
   // Desktop/grid card
+  const number = (totalEntries ?? 0) - index;
   return (
     <div
       onClick={onSelect}
-      className={`h-full border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer ${
+      className={`h-full border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer relative ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
       style={{
@@ -87,6 +94,10 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { 
         transitionDelay: `${index * 80}ms`,
       }}
     >
+      {/* Number badge */}
+      <span className="absolute top-4 right-4 text-[10px] md:text-xs font-mono text-green-600 font-bold select-none">
+        #{number}
+      </span>
       <div className="p-6 md:p-7 flex flex-col h-full">
         <div className="flex items-center gap-3 mb-2">
           <span className={`inline-block text-[10px] md:text-xs font-mono uppercase rounded-full px-2.5 py-1 border ${cat.color}`}>
@@ -96,10 +107,8 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { 
             <Clock className="w-3 h-3" />
             {pub.date}
           </span>
+          <span className="text-[9px] md:text-[10px] text-black/40 font-mono ml-auto">{pub.time}</span>
         </div>
-        <p className="text-[11px] md:text-xs text-black font-mono mb-4 uppercase tracking-wider">
-          Published {pub.day}, {pub.time}
-        </p>
         <h3 className="text-sm md:text-base font-bold text-neutral-900 leading-snug mb-3 break-words">
           {entry.title}
         </h3>
@@ -199,7 +208,7 @@ export default function Journal() {
               >
                 {last10.map((entry, i) => (
                   <div key={entry.id} className="snap-start shrink-0 w-[260px]">
-                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={true} />
+                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={true} totalEntries={entries.length} />
                   </div>
                 ))}
               </div>
@@ -214,7 +223,7 @@ export default function Journal() {
             {/* Desktop: Grid layout */}
             <div className={`hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               {last10.map((entry, i) => (
-                <JournalCard key={entry.id} entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={false} />
+                <JournalCard key={entry.id} entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={false} totalEntries={entries.length} />
               ))}
             </div>
 
