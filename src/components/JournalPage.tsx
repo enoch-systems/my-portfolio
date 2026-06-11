@@ -49,30 +49,30 @@ function JournalCard({ entry, index, visible, isLatest, number, onSelect }: { en
       <span className="absolute top-3 right-3 text-[10px] font-mono text-green-600 font-bold select-none">
         #{number}
       </span>
-      <div className="p-4 flex flex-col h-full">
+      <div className="p-3 sm:p-4 flex flex-col h-full">
         {/* Top row: badge + date */}
-        <div className="flex items-center gap-2 mb-1">
-          <span className={`inline-block text-[11px] font-mono uppercase rounded-full px-2.5 py-1 border ${cat.color}`}>
+        <div className="flex items-center gap-1.5 mb-0.5">
+          <span className={`inline-block text-[9px] sm:text-[10px] font-mono uppercase rounded-full px-1.5 sm:px-2 py-0.5 border ${cat.color}`}>
             {cat.label}
           </span>
-          <span className="text-[10px] text-black/60 font-mono">{pub.date}</span>
+          <span className="text-[8px] sm:text-[9px] text-black/60 font-mono">{pub.date}</span>
         </div>
         {/* Day + Time */}
-        <p className="text-[9px] text-black/40 font-mono mb-3">{pub.day} &middot; {pub.time}</p>
-        <h3 className="text-sm font-bold text-neutral-900 leading-snug mb-3 break-words line-clamp-2 pr-6">
+        <p className="text-[7px] sm:text-[8px] text-black/40 font-mono mb-2">{pub.day} &middot; {pub.time}</p>
+        <h3 className="text-[11px] sm:text-xs font-bold text-neutral-900 leading-snug mb-2 break-words line-clamp-2 pr-6">
           {entry.title}
         </h3>
-        <p className="text-xs text-neutral-600 leading-relaxed mb-2 line-clamp-4">
-          {truncate(entry.content, 26)}
+        <p className="text-[9px] sm:text-[10px] text-neutral-600 leading-relaxed mb-1.5 line-clamp-3">
+          {truncate(entry.content, 22)}
         </p>
-        <p className="text-[10px] font-mono mb-4 text-black">
+        <p className="text-[8px] sm:text-[9px] font-mono mb-3 text-black">
           - Enoch Chukwudi
         </p>
         {/* Subtle separator + Read more */}
         <div className="mt-auto border-t border-neutral-100">
-          <button onClick={(e) => { e.stopPropagation(); onSelect(); }} className="w-full flex items-center justify-center gap-1.5 py-2 text-[11px] font-medium text-neutral-400 hover:text-neutral-900 transition-all duration-200 group cursor-pointer">
+          <button onClick={(e) => { e.stopPropagation(); onSelect(); }} className="w-full flex items-center justify-center gap-1 py-1.5 text-[9px] sm:text-[10px] font-medium text-neutral-400 hover:text-neutral-900 transition-all duration-200 group cursor-pointer">
             Read more
-            <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 transition-transform duration-200 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
@@ -173,7 +173,7 @@ export default function JournalPage() {
         </div>
 
         {/* Entries grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
           {loading ? (
             <div className="col-span-full text-center text-white/30 text-sm py-20">Loading journal entries...</div>
           ) : (
