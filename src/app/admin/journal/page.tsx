@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Pencil, Trash2, X, Search, AlertTriangle, Rocket, Settings, Compass, Lightbulb } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Search, AlertTriangle, Expand } from "lucide-react";
 import { useTheme } from "../layout";
 
 interface JournalEntry {
@@ -28,13 +28,6 @@ const categoryColors: Record<string, string> = {
   thinking: "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400",
 };
 
-const categoryIconMap: Record<string, React.ReactNode> = {
-  shipped: <Rocket className="w-4 h-4" />,
-  engineered: <Settings className="w-4 h-4" />,
-  exploring: <Compass className="w-4 h-4" />,
-  thinking: <Lightbulb className="w-4 h-4" />,
-};
-
 function Input({ label, placeholder, value, onChange, required, hint, type = "text" }: {
   label: string; placeholder: string; value: string; onChange: (v: string) => void;
   required?: boolean; hint?: string; type?: string;
@@ -58,60 +51,32 @@ function Input({ label, placeholder, value, onChange, required, hint, type = "te
   );
 }
 
-function Textarea({ label, placeholder, value, onChange, required, hint, rows = 3 }: {
-  label: string; placeholder: string; value: string; onChange: (v: string) => void;
-  required?: boolean; hint?: string; rows?: number;
+function FullscreenEditor({ open, value, onChange, onClose, label }: {
+  open: boolean; value: string; onChange: (v: string) => void; onClose: () => void; label: string;
 }) {
-  const { theme } = useTheme();
-  return (
-    <div>
-      <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={rows}
-        className={`w-full px-3 py-2 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none ${
-          theme === "dark"
-            ? "bg-white/5 text-white placeholder-gray-500"
-            : "bg-white text-gray-900 border border-gray-200"
-        }`}
-        required={required}
-      />
-      {hint && <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">{hint}</p>}
-    </div>
-  );
-}
-
-function DeleteModal({ open, title, onConfirm, onCancel }: {
-  open: boolean; title: string; onConfirm: () => void; onCancel: () => void;
-}) {
-  const { theme } = useTheme();
+  const [editValue, setEditValue] = useState(value);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-      onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
-    >
-      <div className={`w-full max-w-sm rounded-2xl p-6 ${
-        theme === "dark" ? "bg-gray-900" : "bg-white border border-gray-200"
-      }`}>
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
-            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-          </div>
-          <div>
-            <h3 className={`text-sm font-semibold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Delete entry</h3>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Are you sure you want to delete &ldquo;{title}&rdquo;? This cannot be undone.</p>
-          </div>
+    <div className="fixed inset-0 z-[300] flex flex-col bg-white dark:bg-gray-950">
+      <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200 dark:border-gray-800">
+        <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{label}</span>
+        <div className="flex items-center gap-2">
+          <button onClick={() => { onChange(editValue); onClose(); }}
+            className="px-5 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer"
+          >Save & Close</button>
+          <button onClick={onClose}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+          ><X className="w-5 h-5" /></button>
         </div>
-        <div className="flex gap-2 justify-end">
-          <button onClick={onCancel}
-            className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
-              theme === "dark" ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-            }`}
-          >Cancel</button>
-          <button onClick={onConfirm}
-            className="px-4 py-2 rounded-lg text-xs font-medium bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
-          >Delete</button>
-        </div>
+      </div>
+      <div className="flex-1 flex items-start justify-center p-8 overflow-y-auto bg-gray-50 dark:bg-gray-900">
+        <textarea
+          value={editValue}
+          onChange={(e) => setEditValue(e.target.value)}
+          className="w-full max-w-3xl h-full min-h-[60vh] p-8 rounded-2xl bg-white dark:bg-white text-gray-900 text-base leading-relaxed focus:outline-none resize-none shadow-sm border border-gray-100"
+          style={{ whiteSpace: "pre-wrap", lineHeight: "1.8" }}
+          placeholder="Start typing..."
+        />
       </div>
     </div>
   );
@@ -127,6 +92,7 @@ export default function AdminJournalPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [deleteTarget, setDeleteTarget] = useState<JournalEntry | null>(null);
+  const [fullscreenField, setFullscreenField] = useState<string | null>(null);
   const { theme } = useTheme();
 
   const fetchEntries = async () => {
@@ -168,6 +134,9 @@ export default function AdminJournalPage() {
     await supabase.from("journal_entries").delete().eq("id", target.id);
     fetchEntries();
   };
+
+  const openFullscreen = (field: string) => setFullscreenField(field);
+  const closeFullscreen = () => setFullscreenField(null);
 
   const filtered = entries.filter((entry) => {
     const q = searchQuery.toLowerCase();
@@ -229,7 +198,7 @@ export default function AdminJournalPage() {
         </select>
       </div>
 
-      {/* Entries list as cards */}
+      {/* Entries list */}
       {filtered.length === 0 ? (
         <div className={`text-center py-16 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
           <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
@@ -249,7 +218,9 @@ export default function AdminJournalPage() {
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
                   theme === "dark" ? "bg-white/10" : "bg-gray-100"
                 }`}>
-                  {categoryIconMap[entry.category]}
+                  <span className={`text-xs font-bold ${categoryColors[entry.category].split(" ")[1]}`}>
+                    {entry.category === "shipped" ? "S" : entry.category === "engineered" ? "E" : entry.category === "exploring" ? "X" : "T"}
+                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className={`text-sm font-semibold truncate block ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
@@ -266,17 +237,11 @@ export default function AdminJournalPage() {
                 </div>
                 <div className="flex items-center gap-0.5 flex-shrink-0">
                   <button onClick={() => openEdit(entry)}
-                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                      theme === "dark" ? "text-gray-500 hover:text-white hover:bg-white/10" : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"
-                    }`}
-                  >
-                    <Pencil className="w-3.5 h-3.5" />
-                  </button>
+                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${theme === "dark" ? "text-gray-500 hover:text-white hover:bg-white/10" : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"}`}
+                  ><Pencil className="w-3.5 h-3.5" /></button>
                   <button onClick={() => setDeleteTarget(entry)}
                     className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  ><Trash2 className="w-3.5 h-3.5" /></button>
                 </div>
               </div>
             </div>
@@ -285,7 +250,7 @@ export default function AdminJournalPage() {
       )}
 
       {/* Form Modal */}
-      {showForm && (
+      {showForm && !fullscreenField && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
           onClick={(e) => { if (e.target === e.currentTarget) setShowForm(false); }}
         >
@@ -304,9 +269,7 @@ export default function AdminJournalPage() {
                 </p>
               </div>
               <button onClick={() => setShowForm(false)}
-                className={`p-2 rounded-lg transition-colors cursor-pointer ${
-                  theme === "dark" ? "hover:bg-white/10 text-gray-400" : "hover:bg-gray-100 text-gray-500"
-                }`}
+                className={`p-2 rounded-lg transition-colors cursor-pointer ${theme === "dark" ? "hover:bg-white/10 text-gray-400" : "hover:bg-gray-100 text-gray-500"}`}
               ><X className="w-4 h-4" /></button>
             </div>
 
@@ -320,6 +283,7 @@ export default function AdminJournalPage() {
                     className={`w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
                       theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
                     }`}
+                    style={theme === "dark" ? { colorScheme: "dark" } : undefined}
                   >
                     <option value="shipped">Shipped</option>
                     <option value="engineered">Engineered</option>
@@ -331,15 +295,49 @@ export default function AdminJournalPage() {
                 <Input label="Published At" type="datetime-local" placeholder="" value={form.published_at.slice(0, 16)} onChange={(v) => setForm({ ...form, published_at: new Date(v).toISOString() })} required hint="When this entry was published" />
               </div>
 
-              <Textarea label="Summary" placeholder="A brief summary of the entry (shown in cards, e.g. Deployed real-time interstate shipment tracking with driver mobile app...)" value={form.summary} onChange={(v) => setForm({ ...form, summary: v })} required hint="This appears on the journal card - keep it concise" rows={2} />
+              {/* Summary - expandable */}
+              <div className="relative">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">
+                    Summary <span className="text-red-500">*</span>
+                  </label>
+                  <button type="button" onClick={() => openFullscreen("summary")}
+                    className="text-[10px] text-blue-500 hover:text-blue-400 flex items-center gap-1 transition-colors cursor-pointer"
+                  ><Expand className="w-3 h-3" /> Expand</button>
+                </div>
+                <textarea value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })}
+                  placeholder="A brief summary of the entry (shown in cards)..."
+                  rows={3}
+                  className={`w-full px-3 py-2 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none ${
+                    theme === "dark" ? "bg-white/5 text-white placeholder-gray-500" : "bg-white text-gray-900 border border-gray-200"
+                  }`}
+                  required
+                />
+              </div>
 
-              <Textarea label="Content" placeholder="Write the full journal article here. Include technical details, architecture decisions, challenges, and lessons learned..." value={form.content} onChange={(v) => setForm({ ...form, content: v })} required hint="Full markdown/article body - be as detailed as you want" rows={10} />
+              {/* Content - expandable */}
+              <div className="relative">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-medium text-gray-500 dark:text-gray-400">
+                    Content <span className="text-red-500">*</span>
+                  </label>
+                  <button type="button" onClick={() => openFullscreen("content")}
+                    className="text-[10px] text-blue-500 hover:text-blue-400 flex items-center gap-1 transition-colors cursor-pointer"
+                  ><Expand className="w-3 h-3" /> Expand</button>
+                </div>
+                <textarea value={form.content} onChange={(e) => setForm({ ...form, content: e.target.value })}
+                  placeholder="Write the full journal article here..."
+                  rows={5}
+                  className={`w-full px-3 py-2 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all resize-none ${
+                    theme === "dark" ? "bg-white/5 text-white placeholder-gray-500" : "bg-white text-gray-900 border border-gray-200"
+                  }`}
+                  required
+                />
+              </div>
 
               <div className="flex items-center justify-end gap-3 pt-2 border-t dark:border-white/5">
                 <button type="button" onClick={() => setShowForm(false)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
-                    theme === "dark" ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${theme === "dark" ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`}
                 >Cancel</button>
                 <button type="submit" disabled={saving}
                   className="px-5 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 active:scale-[0.97] transition-all duration-150 disabled:opacity-50 cursor-pointer"
@@ -357,6 +355,22 @@ export default function AdminJournalPage() {
         </div>
       )}
 
+      {/* Fullscreen editors */}
+      <FullscreenEditor
+        open={fullscreenField === "summary"}
+        value={form.summary}
+        onChange={(v) => setForm({ ...form, summary: v })}
+        onClose={closeFullscreen}
+        label="Summary"
+      />
+      <FullscreenEditor
+        open={fullscreenField === "content"}
+        value={form.content}
+        onChange={(v) => setForm({ ...form, content: v })}
+        onClose={closeFullscreen}
+        label="Content"
+      />
+
       {/* Delete confirmation modal */}
       <DeleteModal
         open={deleteTarget !== null}
@@ -364,6 +378,38 @@ export default function AdminJournalPage() {
         onConfirm={handleDelete}
         onCancel={() => setDeleteTarget(null)}
       />
+    </div>
+  );
+}
+
+function DeleteModal({ open, title, onConfirm, onCancel }: {
+  open: boolean; title: string; onConfirm: () => void; onCancel: () => void;
+}) {
+  const { theme } = useTheme();
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
+    >
+      <div className={`w-full max-w-sm rounded-2xl p-6 ${theme === "dark" ? "bg-gray-900" : "bg-white border border-gray-200"}`}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+          </div>
+          <div>
+            <h3 className={`text-sm font-semibold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Delete entry</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Are you sure you want to delete &ldquo;{title}&rdquo;? This cannot be undone.</p>
+          </div>
+        </div>
+        <div className="flex gap-2 justify-end">
+          <button onClick={onCancel}
+            className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${theme === "dark" ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"}`}
+          >Cancel</button>
+          <button onClick={onConfirm}
+            className="px-4 py-2 rounded-lg text-xs font-medium bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
+          >Delete</button>
+        </div>
+      </div>
     </div>
   );
 }
