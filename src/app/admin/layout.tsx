@@ -49,7 +49,7 @@ function ConfirmModal({
       onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
     >
       <div className="w-full max-w-sm rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-2xl animate-in fade-in zoom-in-95">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center galp-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
             <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
           </div>

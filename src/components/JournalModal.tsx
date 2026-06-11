@@ -131,7 +131,7 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
                 Full Entry
               </p>
               <div className="text-xs md:text-sm text-neutral-900 leading-relaxed whitespace-pre-wrap">
-                {entry.content}
+                {entry.content.replace(/\\n/g, "\n")}
               </div>
             </div>
 
