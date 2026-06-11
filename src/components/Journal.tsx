@@ -36,7 +36,7 @@ function JournalCard({ entry, index, visible, isLatest, onSelect }: { entry: Jou
   return (
     <div
       onClick={onSelect}
-      className={`border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer ${
+      className={`h-full border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
       style={{
@@ -156,7 +156,7 @@ export default function Journal() {
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {last10.map((entry, i) => (
-                  <div key={entry.id} className="snap-start shrink-0 w-[280px]">
+                  <div key={entry.id} className="snap-start shrink-0 w-[280px] h-full">
                     <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} />
                   </div>
                 ))}
