@@ -62,7 +62,9 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
 
   if (!entry) return null;
 
-  const contentParagraphs = (entry.content || "").split("\n").filter(Boolean);
+  // Normalize both real newlines and literal \n strings from database
+  const normalizedContent = (entry.content || "").replace(/\\n/g, "\n");
+  const contentParagraphs = normalizedContent.split("\n").filter(Boolean);
 
   const cat = categoryStyles[entry.category] || categoryStyles.shipped;
   const pub = formatPublished(entry.published_at);
