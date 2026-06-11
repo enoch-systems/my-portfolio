@@ -45,27 +45,27 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { 
           transitionDelay: `${index * 80}ms`,
         }}
       >
-        <div className="p-3.5 flex flex-col h-full">
+        <div className="p-4 flex flex-col h-full">
           {/* Top row: badge + date */}
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className={`inline-block text-[9px] font-mono uppercase rounded-full px-2 py-0.5 border ${cat.color}`}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className={`inline-block text-[10px] font-mono uppercase rounded-full px-2 py-0.5 border ${cat.color}`}>
               {cat.label}
             </span>
-            <span className="text-[9px] text-black font-mono">{pub.date}</span>
+            <span className="text-[10px] text-black font-mono">{pub.date}</span>
           </div>
           {/* Title */}
-          <h3 className="text-[11px] font-bold text-neutral-900 leading-snug mb-1.5 break-words line-clamp-2">
+          <h3 className="text-xs font-bold text-neutral-900 leading-snug mb-2 break-words line-clamp-2">
             {entry.title}
           </h3>
-          {/* Content preview - shorter on mobile */}
-          <p className="text-[10px] text-neutral-600 leading-relaxed mb-2 line-clamp-3">
-            {truncate(entry.content, 18)}
+          {/* Content preview */}
+          <p className="text-[11px] text-neutral-600 leading-relaxed mb-3 line-clamp-4">
+            {truncate(entry.content, 22)}
           </p>
           {/* Spacer + Read more */}
-          <div className="mt-auto border-t border-neutral-100 pt-1.5">
-            <button onClick={(e) => { e.stopPropagation(); onSelect(); }} className="w-full flex items-center justify-center gap-1 py-1 text-[9px] font-medium text-neutral-400 hover:text-neutral-900 transition-all duration-200 group cursor-pointer">
+          <div className="mt-auto border-t border-neutral-100 pt-2">
+            <button onClick={(e) => { e.stopPropagation(); onSelect(); }} className="w-full flex items-center justify-center gap-1.5 py-1.5 text-[10px] font-medium text-neutral-400 hover:text-neutral-900 transition-all duration-200 group cursor-pointer">
               Read
-              <svg className="w-3 h-3 transition-transform duration-200 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
