@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Pencil, Trash2, X, ExternalLink, Search } from "lucide-react";
+import { Plus, Pencil, Trash2, X, ExternalLink, Search, AlertTriangle } from "lucide-react";
 import { useTheme } from "../layout";
 
 interface Project {
@@ -33,9 +33,9 @@ const typeColors: Record<string, string> = {
 };
 
 const typeIcons: Record<string, string> = {
-  engineering: "⚙",
-  client: "▣",
-  research: "◎",
+  engineering: "\u2699",
+  client: "\u25A3",
+  research: "\u25CB",
 };
 
 function Input({ label, placeholder, value, onChange, required, hint }: {
@@ -84,6 +84,42 @@ function Textarea({ label, placeholder, value, onChange, required, hint, rows = 
   );
 }
 
+function DeleteModal({ open, title, onConfirm, onCancel }: {
+  open: boolean; title: string; onConfirm: () => void; onCancel: () => void;
+}) {
+  const { theme } = useTheme();
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+      onClick={(e) => { if (e.target === e.currentTarget) onCancel(); }}
+    >
+      <div className={`w-full max-w-sm rounded-2xl p-6 ${
+        theme === "dark" ? "bg-gray-900" : "bg-white border border-gray-200"
+      }`}>
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/20 flex items-center justify-center flex-shrink-0">
+            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+          </div>
+          <div>
+            <h3 className={`text-sm font-semibold ${theme === "dark" ? "text-white" : "text-gray-900"}`}>Delete project</h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Are you sure you want to delete &ldquo;{title}&rdquo;? This cannot be undone.</p>
+          </div>
+        </div>
+        <div className="flex gap-2 justify-end">
+          <button onClick={onCancel}
+            className={`px-4 py-2 rounded-lg text-xs font-medium transition-colors cursor-pointer ${
+              theme === "dark" ? "text-gray-400 hover:text-white hover:bg-white/10" : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+            }`}
+          >Cancel</button>
+          <button onClick={onConfirm}
+            className="px-4 py-2 rounded-lg text-xs font-medium bg-red-600 text-white hover:bg-red-700 transition-colors cursor-pointer"
+          >Delete</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -93,6 +129,7 @@ export default function AdminProjectsPage() {
   const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
+  const [deleteTarget, setDeleteTarget] = useState<Project | null>(null);
   const { theme } = useTheme();
 
   const fetchProjects = async () => {
@@ -136,9 +173,11 @@ export default function AdminProjectsPage() {
     fetchProjects();
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this project? This action cannot be undone.")) return;
-    const { error } = await supabase.from("projects").delete().eq("id", id);
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const target = deleteTarget;
+    setDeleteTarget(null);
+    const { error } = await supabase.from("projects").delete().eq("id", target.id);
     if (error) { console.error("Delete error:", error); alert(`Failed to delete project: ${error.message}`); return; }
     fetchProjects();
   };
@@ -253,7 +292,7 @@ export default function AdminProjectsPage() {
                 >
                   <Pencil className="w-3.5 h-3.5" />
                 </button>
-                <button onClick={() => handleDelete(p.id)}
+                <button onClick={() => setDeleteTarget(p)}
                   className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -340,6 +379,14 @@ export default function AdminProjectsPage() {
           </div>
         </div>
       )}
+
+      {/* Delete confirmation modal */}
+      <DeleteModal
+        open={deleteTarget !== null}
+        title={deleteTarget?.name ?? ""}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }
