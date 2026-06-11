@@ -39,7 +39,7 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { 
     return (
       <div
         onClick={onSelect}
-        className="h-full min-h-[280px] border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 cursor-pointer"
+        className="h-full min-h-[320px] border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 cursor-pointer"
         style={{
           background: "#ffffff",
           transitionDelay: `${index * 80}ms`,
