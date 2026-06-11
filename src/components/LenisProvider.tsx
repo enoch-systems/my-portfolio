@@ -35,7 +35,7 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Handle anchor clicks for smooth scroll
+  // Handle anchor clicks for smooth scroll — no hash in URL
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       const target = e.target as HTMLElement;
@@ -51,10 +51,21 @@ export default function LenisProvider({ children }: { children: ReactNode }) {
       if (el) {
         lenisRef.current?.scrollTo(el, { offset: -80 });
       }
+      // Remove any hash from the URL
+      if (window.location.hash) {
+        window.history.replaceState(null, "", window.location.pathname);
+      }
     }
 
     document.addEventListener("click", handleClick);
     return () => document.removeEventListener("click", handleClick);
+  }, []);
+
+  // Clear any hash on page load (prevents Vercel restore issues)
+  useEffect(() => {
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
   }, []);
 
   return <>{children}</>;
