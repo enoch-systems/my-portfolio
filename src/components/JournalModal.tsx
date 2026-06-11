@@ -62,8 +62,14 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
 
   if (!entry) return null;
 
-  // Normalize both real newlines and literal \n strings from database
-  const normalizedContent = (entry.content || "").replace(/\\n/g, "\n");
+  // Normalize all escaped/JSON-escaped newlines to real newlines
+  let normalizedContent = entry.content || "";
+  // Keep unescaping until no more escaped \n sequences remain
+  // This handles single \n, double \\n, or quadruple \\\\n escaping
+  while (normalizedContent.includes("\\n")) {
+    normalizedContent = normalizedContent.replace(/\\n/g, "\n");
+  }
+  normalizedContent = normalizedContent.replace(/\r\n/g, "\n");
   const contentParagraphs = normalizedContent.split("\n").filter(Boolean);
 
   const cat = categoryStyles[entry.category] || categoryStyles.shipped;
