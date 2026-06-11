@@ -36,7 +36,7 @@ function JournalCard({ entry, index, visible, isLatest, onSelect }: { entry: Jou
   return (
     <div
       onClick={onSelect}
-      className={`shrink-0 w-[300px] md:w-[340px] border border-neutral-200/80  overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer ${
+      className={`border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] cursor-pointer ${
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
       style={{
@@ -149,7 +149,28 @@ export default function Journal() {
           <div className="text-center text-white/30 text-sm py-20">Loading journal entries...</div>
         ) : (
           <>
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            {/* Mobile: Horizontal slide (right to left) */}
+            <div className="md:hidden">
+              <div
+                className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {last10.map((entry, i) => (
+                  <div key={entry.id} className="snap-start shrink-0 w-[280px]">
+                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} />
+                  </div>
+                ))}
+              </div>
+              {/* Hint arrow indicator */}
+              <div className="flex justify-center mt-2 animate-pulse">
+                <svg className="w-5 h-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Desktop: Grid layout */}
+            <div className={`hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               {last10.map((entry, i) => (
                 <JournalCard key={entry.id} entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} />
               ))}

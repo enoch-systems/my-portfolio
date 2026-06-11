@@ -253,6 +253,15 @@ button, input, textarea, select {
   overflow-x: scroll !important;
 }
 
+/* Hide scrollbar for horizontal slide containers (mobile journal) */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Loader spinner for contact form */
 .loader {
   width: 20px;
