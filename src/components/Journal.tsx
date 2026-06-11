@@ -152,11 +152,11 @@ export default function Journal() {
             {/* Mobile: Horizontal slide (right to left) */}
             <div className="md:hidden">
               <div
-                className="flex overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide"
+                className="flex items-stretch overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {last10.map((entry, i) => (
-                  <div key={entry.id} className="snap-start shrink-0 w-[280px] h-full">
+                  <div key={entry.id} className="snap-start shrink-0 w-[280px]">
                     <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} />
                   </div>
                 ))}
