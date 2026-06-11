@@ -30,9 +30,52 @@ function truncate(text: string, maxWords: number): string {
   return words.slice(0, maxWords).join(" ") + "...";
 }
 
-function JournalCard({ entry, index, visible, isLatest, onSelect }: { entry: JournalEntryRow; index: number; visible: boolean; isLatest?: boolean; onSelect: () => void }) {
+function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile }: { entry: JournalEntryRow; index: number; visible: boolean; isLatest?: boolean; onSelect: () => void; isMobile?: boolean }) {
   const cat = categoryStyles[entry.category] || categoryStyles.shipped;
   const pub = formatPublished(entry.published_at);
+
+  if (isMobile) {
+    // Compact mobile card for horizontal slide
+    return (
+      <div
+        onClick={onSelect}
+        className="h-full border border-neutral-200/80 overflow-hidden transition-all duration-500 ease-out hover:border-neutral-300 cursor-pointer"
+        style={{
+          background: "#ffffff",
+          transitionDelay: `${index * 80}ms`,
+        }}
+      >
+        <div className="p-3.5 flex flex-col h-full">
+          {/* Top row: badge + date */}
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className={`inline-block text-[9px] font-mono uppercase rounded-full px-2 py-0.5 border ${cat.color}`}>
+              {cat.label}
+            </span>
+            <span className="text-[9px] text-black font-mono">{pub.date}</span>
+          </div>
+          {/* Title */}
+          <h3 className="text-[11px] font-bold text-neutral-900 leading-snug mb-1.5 break-words line-clamp-2">
+            {entry.title}
+          </h3>
+          {/* Content preview - shorter on mobile */}
+          <p className="text-[10px] text-neutral-600 leading-relaxed mb-2 line-clamp-3">
+            {truncate(entry.content, 18)}
+          </p>
+          {/* Spacer + Read more */}
+          <div className="mt-auto border-t border-neutral-100 pt-1.5">
+            <button onClick={(e) => { e.stopPropagation(); onSelect(); }} className="w-full flex items-center justify-center gap-1 py-1 text-[9px] font-medium text-neutral-400 hover:text-neutral-900 transition-all duration-200 group cursor-pointer">
+              Read
+              <svg className="w-3 h-3 transition-transform duration-200 group-hover:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop/grid card
   return (
     <div
       onClick={onSelect}
@@ -66,7 +109,6 @@ function JournalCard({ entry, index, visible, isLatest, onSelect }: { entry: Jou
         <p className="text-[10px] md:text-xs font-mono mb-5 pb-15 text-black">
           - Enoch Chukwudi
         </p>
-        {/* Subtle separator + Read more */}
         <div className="mt-auto border-t border-neutral-100">
           <button onClick={(e) => { e.stopPropagation(); onSelect(); }} className="w-full flex items-center justify-center gap-1.5 py-3 text-[11px] md:text-xs font-medium text-neutral-500 hover:text-neutral-900 transition-all duration-200 group cursor-pointer">
             Read more
@@ -149,21 +191,21 @@ export default function Journal() {
           <div className="text-center text-white/30 text-sm py-20">Loading journal entries...</div>
         ) : (
           <>
-            {/* Mobile: Horizontal slide (right to left) */}
+            {/* Mobile: Horizontal slide with compact cards */}
             <div className="md:hidden">
               <div
-                className="flex items-stretch overflow-x-auto gap-4 pb-4 snap-x snap-mandatory scrollbar-hide"
+                className="flex items-stretch overflow-x-auto gap-3 pb-6 snap-x snap-mandatory scrollbar-hide"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {last10.map((entry, i) => (
-                  <div key={entry.id} className="snap-start shrink-0 w-[280px]">
-                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} />
+                  <div key={entry.id} className="snap-start shrink-0 w-[260px]">
+                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={true} />
                   </div>
                 ))}
               </div>
               {/* Hint arrow indicator */}
-              <div className="flex justify-center mt-2 animate-pulse">
-                <svg className="w-5 h-5 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <div className="flex justify-center -mt-2 mb-2 animate-pulse">
+                <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </div>
@@ -172,12 +214,12 @@ export default function Journal() {
             {/* Desktop: Grid layout */}
             <div className={`hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               {last10.map((entry, i) => (
-                <JournalCard key={entry.id} entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} />
+                <JournalCard key={entry.id} entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={false} />
               ))}
             </div>
 
             {/* See more link */}
-            <div className={`mt-8 text-center transition-all duration-700 ease-out delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            <div className={`mt-6 text-center transition-all duration-700 ease-out delay-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               <Link
                 href="/journal"
                 className="inline-flex items-center gap-2 px-6 py-3 text-xs font-medium rounded-full border border-white/20 bg-white/10 text-white/70 hover:bg-white hover:text-black hover:border-white transition-all duration-200 group"
