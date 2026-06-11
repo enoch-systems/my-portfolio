@@ -1,6 +1,6 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import JournalPage from "@/components/JournalPage";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import JournalPage from "@/components/journal/JournalPage";
 
 export default function Journal() {
   return (

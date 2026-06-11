@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import LenisProvider from "@/components/LenisProvider";
-import QueryProvider from "@/components/QueryProvider";
+import LenisProvider from "@/components/providers/LenisProvider";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Enoch Chukwudi - Fullstack Engineer (Backend-Focused)",

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
+import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary/client";
 
 export default function ProjectCard({ project }: { project: any }) {
   return (

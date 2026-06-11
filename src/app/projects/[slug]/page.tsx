@@ -7,8 +7,8 @@ import {
   fetchProjectBySlug,
   fetchProjectsByType,
   type Project,
-} from "@/lib/data";
-import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
+} from "@/lib/data/index";
+import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary/client";
 import { ArrowLeft, ExternalLink, ArrowUpRight, Monitor, Clock, Moon, Sun } from "lucide-react";
 
 function goBackToProjects(router: ReturnType<typeof useRouter>, tab: string) {

@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { fetchJournalEntries } from "@/lib/data";
-import type { JournalEntryRow } from "@/lib/data";
+import { useEffect, useState } from "react";
+import { fetchJournalEntries } from "@/lib/data/index";
+import type { JournalEntryRow } from "@/lib/data/index";
 import { ArrowUpRight, Clock } from "lucide-react";
 import Link from "next/link";
 import JournalModal from "./JournalModal";
-import { getTimeFormat } from "@/lib/settings";
+import { getTimeFormat } from "@/lib/settings/index";
+import { useInView } from "@/hooks/useInView";
 
 const categoryStyles: Record<string, { label: string; color: string }> = {
   updates: { label: "updates", color: "border-black bg-black text-white" },
@@ -138,8 +139,7 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, tota
 }
 
 export default function Journal() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [sectionRef, visible] = useInView(0.05);
   const [selectedEntry, setSelectedEntry] = useState<JournalEntryRow | null>(null);
   const [entries, setEntries] = useState<JournalEntryRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -154,22 +154,6 @@ export default function Journal() {
   const closeModal = () => {
     setSelectedEntry(null);
   };
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   const last10 = entries.slice(0, 10);
 

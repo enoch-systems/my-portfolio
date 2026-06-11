@@ -3,7 +3,7 @@
 import { useEffect, useState, createContext, useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import {
   FolderKanban,
@@ -18,8 +18,8 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { getTimeFormat, setTimeFormat } from "@/lib/settings";
-import type { TimeFormat } from "@/lib/settings";
+import { getTimeFormat, setTimeFormat } from "@/lib/settings/index";
+import type { TimeFormat } from "@/lib/settings/index";
 
 // Theme context
 const ThemeContext = createContext<{

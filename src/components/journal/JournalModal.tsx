@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { X, Clock, ChevronDown, ChevronUp } from "lucide-react";
-import type { JournalEntryRow } from "@/lib/data";
-import { getTimeFormat } from "@/lib/settings";
+import type { JournalEntryRow } from "@/lib/data/index";
+import { getTimeFormat } from "@/lib/settings/index";
 
 interface JournalModalProps {
   entry: JournalEntryRow | null;

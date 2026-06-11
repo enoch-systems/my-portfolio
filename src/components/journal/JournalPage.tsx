@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { fetchJournalEntries, type JournalEntryRow } from "@/lib/data";
+import { useEffect, useState, useCallback } from "react";
+import { fetchJournalEntries, type JournalEntryRow } from "@/lib/data/index";
 import { ArrowUpRight, Clock } from "lucide-react";
 import Link from "next/link";
 import JournalModal from "./JournalModal";
-import { getTimeFormat } from "@/lib/settings";
+import { getTimeFormat } from "@/lib/settings/index";
+import { useInView } from "@/hooks/useInView";
+import { usePerPage } from "@/hooks/usePerPage";
 
 const PER_PAGE = 8;
 
@@ -84,24 +86,8 @@ function JournalCard({ entry, index, visible, isLatest, number, onSelect }: { en
   );
 }
 
-function usePerPage() {
-  const [perPage, setPerPage] = useState(8);
-  useEffect(() => {
-    function update() {
-      const w = window.innerWidth;
-      if (w >= 768 && w < 1024) setPerPage(9);  // md
-      else setPerPage(8);                         // default (sm, lg+)
-    }
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-  return perPage;
-}
-
 export default function JournalPage() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [sectionRef, visible] = useInView(0.05);
   const [page, setPage] = useState(1);
   const [selectedEntry, setSelectedEntry] = useState<JournalEntryRow | null>(null);
   const [entries, setEntries] = useState<JournalEntryRow[]>([]);
@@ -127,22 +113,6 @@ export default function JournalPage() {
 
   const closeModal = useCallback(() => {
     setSelectedEntry(null);
-  }, []);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.05 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
   }, []);
 
   return (

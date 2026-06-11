@@ -1,14 +1,14 @@
 import { Suspense } from "react";
-import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
-import SocialSidebar from "@/components/SocialSidebar";
-import Layers from "@/components/Layers";
-import About from "@/components/About";
-import Projects from "@/components/Projects";
-import Journal from "@/components/Journal";
-import Contact from "@/components/Contact";
-import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
+import Navbar from "@/components/layout/Navbar";
+import Hero from "@/components/sections/Hero";
+import SocialSidebar from "@/components/layout/SocialSidebar";
+import Layers from "@/components/sections/Layers";
+import About from "@/components/sections/About";
+import Projects from "@/components/projects/Projects";
+import Journal from "@/components/journal/Journal";
+import Contact from "@/components/sections/Contact";
+import Footer from "@/components/layout/Footer";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-black">

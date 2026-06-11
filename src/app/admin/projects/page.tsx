@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/client";
 import { Plus, Pencil, Trash2, X, ExternalLink, Search, AlertTriangle, Expand, Minimize } from "lucide-react";
 import { useTheme } from "../layout";
 

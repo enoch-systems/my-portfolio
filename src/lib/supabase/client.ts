@@ -20,3 +20,5 @@ export const supabase = isConfigured
   : createMockClient();
 
 export { isConfigured };
+
+

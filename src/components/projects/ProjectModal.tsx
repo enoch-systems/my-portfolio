@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { X, Lock, Eye, Shield, FileText } from "lucide-react";
-import type { Project } from "@/lib/data";
+import type { Project } from "@/lib/data/index";
 
 interface ProjectModalProps {
   project: Project | null;

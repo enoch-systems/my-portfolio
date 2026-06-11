@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { personalData } from "@/lib/data";
+import { personalData } from "@/lib/data/index";
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", mobile: "", message: "" });

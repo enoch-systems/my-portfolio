@@ -1,4 +1,4 @@
-import { personalData } from "@/lib/data";
+import { personalData } from "@/lib/data/index";
 
 export default function Footer() {
   return (

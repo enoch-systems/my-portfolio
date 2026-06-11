@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
-import { fetchAllProjects, type Project } from "@/lib/data";
-import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary";
+import { fetchAllProjects, type Project } from "@/lib/data/index";
+import { optimizeCloudinaryUrl, getCloudinaryBlurUrl } from "@/lib/cloudinary/client";
 import ProjectModal from "./ProjectModal";
+import { useInView } from "@/hooks/useInView";
 
 const PER_PAGE = 4;
 
@@ -14,8 +15,7 @@ export default function Projects() {
   const router = useRouter();
   const [tab, setTab] = useState<"engineering" | "client" | "research">("engineering");
   const [page, setPage] = useState(1);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [sectionRef, visible] = useInView(0.1);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // Fetch all 3 project types at once — cached by React Query
@@ -34,23 +34,6 @@ export default function Projects() {
   useEffect(() => {
     setPage(1);
   }, [tab]);
-
-  // Intersection observer for entrance animations
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
 
   const switchTab = (t: "engineering" | "client" | "research") => {
     setTab(t);
