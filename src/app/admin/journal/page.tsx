@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Pencil, Trash2, X, Search, AlertTriangle } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Search, AlertTriangle, Rocket, Settings, Compass, Lightbulb } from "lucide-react";
 import { useTheme } from "../layout";
 
 interface JournalEntry {
@@ -28,11 +28,11 @@ const categoryColors: Record<string, string> = {
   thinking: "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400",
 };
 
-const categoryIcons: Record<string, string> = {
-  shipped: "\u2197",
-  engineered: "\u2699",
-  exploring: "\u25C7",
-  thinking: "\u25CB",
+const categoryIconMap: Record<string, React.ReactNode> = {
+  shipped: <Rocket className="w-4 h-4" />,
+  engineered: <Settings className="w-4 h-4" />,
+  exploring: <Compass className="w-4 h-4" />,
+  thinking: <Lightbulb className="w-4 h-4" />,
 };
 
 function Input({ label, placeholder, value, onChange, required, hint, type = "text" }: {
@@ -206,11 +206,11 @@ export default function AdminJournalPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="relative flex-1 max-w-xs">
           <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`} />
           <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search entries by title or summary..."
+            placeholder="Search entries..."
             className={`w-full pl-9 pr-3 py-2 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
               theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
             }`}
@@ -229,7 +229,7 @@ export default function AdminJournalPage() {
         </select>
       </div>
 
-      {/* Entries list */}
+      {/* Entries list as cards */}
       {filtered.length === 0 ? (
         <div className={`text-center py-16 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
           <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
@@ -238,48 +238,46 @@ export default function AdminJournalPage() {
           <p className="text-sm font-medium">No entries found</p>
         </div>
       ) : (
-        <div className="space-y-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filtered.map((entry) => (
             <div key={entry.id}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                theme === "dark" ? "hover:bg-white/[0.03]" : "hover:bg-gray-50"
+              className={`px-4 py-3.5 rounded-xl ${
+                theme === "dark" ? "bg-white/[0.04]" : "bg-white shadow-sm border border-gray-200"
               }`}
             >
-              {/* Category icon */}
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0 ${
-                theme === "dark" ? "bg-white/5" : "bg-gray-100"
-              }`}>
-                {categoryIcons[entry.category]}
-              </div>
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className={`text-sm font-medium truncate ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
+              <div className="flex items-start gap-3">
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                  theme === "dark" ? "bg-white/10" : "bg-gray-100"
+                }`}>
+                  {categoryIconMap[entry.category]}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className={`text-sm font-semibold truncate block ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
                     {entry.title}
                   </span>
+                  <p className={`text-xs mt-1 line-clamp-1 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
+                    {new Date(entry.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${categoryColors[entry.category]}`}>
+                      {entry.category}
+                    </span>
+                  </div>
                 </div>
-                <p className={`text-[11px] mt-0.5 truncate ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
-                  {new Date(entry.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                </p>
-              </div>
-              {/* Category badge */}
-              <span className={`hidden sm:inline-block text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${categoryColors[entry.category]}`}>
-                {entry.category}
-              </span>
-              {/* Actions */}
-              <div className="flex items-center gap-0.5 flex-shrink-0">
-                <button onClick={() => openEdit(entry)}
-                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                    theme === "dark" ? "text-gray-500 hover:text-white hover:bg-white/10" : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  <Pencil className="w-3.5 h-3.5" />
-                </button>
-                <button onClick={() => setDeleteTarget(entry)}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex items-center gap-0.5 flex-shrink-0">
+                  <button onClick={() => openEdit(entry)}
+                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                      theme === "dark" ? "text-gray-500 hover:text-white hover:bg-white/10" : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={() => setDeleteTarget(entry)}
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { Plus, Pencil, Trash2, X, ExternalLink, Search, AlertTriangle } from "lucide-react";
+import { Plus, Pencil, Trash2, X, ExternalLink, Search, AlertTriangle, Settings, Briefcase, BookOpen } from "lucide-react";
 import { useTheme } from "../layout";
 
 interface Project {
@@ -32,10 +32,10 @@ const typeColors: Record<string, string> = {
   research: "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-400",
 };
 
-const typeIcons: Record<string, string> = {
-  engineering: "\u2699",
-  client: "\u25A3",
-  research: "\u25CB",
+const typeIconMap: Record<string, React.ReactNode> = {
+  engineering: <Settings className="w-4 h-4" />,
+  client: <Briefcase className="w-4 h-4" />,
+  research: <BookOpen className="w-4 h-4" />,
 };
 
 function Input({ label, placeholder, value, onChange, required, hint }: {
@@ -219,11 +219,11 @@ export default function AdminProjectsPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="relative flex-1 max-w-xs">
           <Search className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`} />
           <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search projects by name, category, or platform..."
+            placeholder="Search projects..."
             className={`w-full pl-9 pr-3 py-2 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500/50 transition-all ${
               theme === "dark" ? "bg-white/5 text-white" : "bg-white text-gray-900 border border-gray-200"
             }`}
@@ -241,7 +241,7 @@ export default function AdminProjectsPage() {
         </select>
       </div>
 
-      {/* Projects list */}
+      {/* Projects list as cards */}
       {filtered.length === 0 ? (
         <div className={`text-center py-16 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
           <svg className="w-10 h-10 mx-auto mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
@@ -250,53 +250,54 @@ export default function AdminProjectsPage() {
           <p className="text-sm font-medium">No projects found</p>
         </div>
       ) : (
-        <div className="space-y-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {filtered.map((p) => (
             <div key={p.id}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                theme === "dark" ? "hover:bg-white/[0.03]" : "hover:bg-gray-50"
+              className={`px-4 py-3.5 rounded-xl ${
+                theme === "dark" ? "bg-white/[0.04]" : "bg-white shadow-sm border border-gray-200"
               }`}
             >
-              {/* Type icon */}
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0 ${
-                theme === "dark" ? "bg-white/5" : "bg-gray-100"
-              }`}>
-                {typeIcons[p.category_type]}
-              </div>
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className={`text-sm font-medium truncate ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
-                    {p.name}
-                  </span>
-                  {p.live_url && (
-                    <a href={p.live_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 flex-shrink-0">
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  )}
+              <div className="flex items-start gap-3">
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                  theme === "dark" ? "bg-white/10" : "bg-gray-100"
+                }`}>
+                  {typeIconMap[p.category_type]}
                 </div>
-                <p className={`text-[11px] mt-0.5 truncate ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
-                  {p.category} · {p.platforms}
-                </p>
-              </div>
-              {/* Type badge */}
-              <span className={`hidden sm:inline-block text-[10px] font-medium px-2 py-0.5 rounded-full flex-shrink-0 ${typeColors[p.category_type]}`}>
-                {p.category_type}
-              </span>
-              {/* Actions */}
-              <div className="flex items-center gap-0.5 flex-shrink-0">
-                <button onClick={() => openEdit(p)}
-                  className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                    theme === "dark" ? "text-gray-500 hover:text-white hover:bg-white/10" : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"
-                  }`}
-                >
-                  <Pencil className="w-3.5 h-3.5" />
-                </button>
-                <button onClick={() => setDeleteTarget(p)}
-                  className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className={`text-sm font-semibold truncate ${theme === "dark" ? "text-white" : "text-gray-900"}`}>
+                      {p.name}
+                    </span>
+                    {p.live_url && (
+                      <a href={p.live_url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-400 flex-shrink-0">
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                  <p className={`text-xs mt-1 line-clamp-1 ${theme === "dark" ? "text-gray-500" : "text-gray-400"}`}>
+                    {p.category} &middot; {p.platforms}
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${typeColors[p.category_type]}`}>
+                      {p.category_type}
+                    </span>
+                    <span className={`text-[10px] ${theme === "dark" ? "text-gray-600" : "text-gray-400"}`}>{p.slug}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-0.5 flex-shrink-0">
+                  <button onClick={() => openEdit(p)}
+                    className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                      theme === "dark" ? "text-gray-500 hover:text-white hover:bg-white/10" : "text-gray-400 hover:text-gray-900 hover:bg-gray-100"
+                    }`}
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button onClick={() => setDeleteTarget(p)}
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -349,15 +350,15 @@ export default function AdminProjectsPage() {
                 </div>
                 <Input label="Category" placeholder="e.g. Enterprise SaaS" value={form.category} onChange={(v) => setForm({ ...form, category: v })} required />
               </div>
-              <Input label="Platforms" placeholder="e.g. Web App, Web Dashboard + Mobile App + API" value={form.platforms} onChange={(v) => setForm({ ...form, platforms: v })} required />
+              <Input label="Platforms" placeholder="e.g. Web App, Dashboard + Mobile App + API" value={form.platforms} onChange={(v) => setForm({ ...form, platforms: v })} required />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input label="Image URL" placeholder="https://images.unsplash.com/..." value={form.image || ""} onChange={(v) => setForm({ ...form, image: v || null })} required hint="Must be 1200×750 pixels (8:5 ratio)" />
-                <Input label="Live URL" placeholder="https://example.com" value={form.live_url || ""} onChange={(v) => setForm({ ...form, live_url: v || null })} hint="Link to the live/deployed project" />
+                <Input label="Image URL" placeholder="https://images.unsplash.com/..." value={form.image || ""} onChange={(v) => setForm({ ...form, image: v || null })} required hint="Must be 1200x750 pixels (8:5 ratio)" />
+                <Input label="Live URL" placeholder="https://example.com" value={form.live_url || ""} onChange={(v) => setForm({ ...form, live_url: v || null })} hint="Link to the live project" />
               </div>
-              <Input label="GitHub URL" placeholder="https://github.com/enoch-systems/..." value={form.github_url || ""} onChange={(v) => setForm({ ...form, github_url: v || null })} hint="Link to the source code repository" />
-              <Textarea label="About" placeholder="A longer description shown on the project detail page..." value={form.about} onChange={(v) => setForm({ ...form, about: v || null })} hint="Optional - shown in the header of the project detail page" rows={3} />
-              <Textarea label="Problem" placeholder="What problem does this project solve?" value={form.problem} onChange={(v) => setForm({ ...form, problem: v })} required hint="Shown in the Problem section on the project detail page" rows={10} />
-              <Textarea label="Approach" placeholder="How was the problem solved?" value={form.approach} onChange={(v) => setForm({ ...form, approach: v })} required hint="Shown in the Approach section on the project detail page" rows={10} />
+              <Input label="GitHub URL" placeholder="https://github.com/enoch-systems/..." value={form.github_url || ""} onChange={(v) => setForm({ ...form, github_url: v || null })} hint="Link to the source code" />
+              <Textarea label="About" placeholder="A longer description for the project detail page..." value={form.about} onChange={(v) => setForm({ ...form, about: v || null })} hint="Optional" rows={3} />
+              <Textarea label="Problem" placeholder="What problem does this project solve?" value={form.problem} onChange={(v) => setForm({ ...form, problem: v })} required hint="Problem section" rows={10} />
+              <Textarea label="Approach" placeholder="How was the problem solved?" value={form.approach} onChange={(v) => setForm({ ...form, approach: v })} required hint="Approach section" rows={10} />
               <div className="flex items-center justify-end gap-3 pt-2 border-t dark:border-white/5">
                 <button type="button" onClick={() => setShowForm(false)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
