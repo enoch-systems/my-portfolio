@@ -156,7 +156,7 @@ export default function Journal() {
     setSelectedEntry(null);
   };
 
-  const last10 = entries.slice(0, 10);
+  const last5 = entries.slice(0, 5);
 
   return (
     <section id="journal" className="py-24 relative overflow-hidden">
@@ -191,31 +191,23 @@ export default function Journal() {
           <div className="text-center text-white/30 text-sm py-20">Loading journal entries...</div>
         ) : (
           <>
-            {/* Mobile: Horizontal slide with compact cards */}
-            <div className="md:hidden">
+            {/* Horizontal scroll row — visible on all screen sizes */}
+            <div className={`transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
               <div
-                className="flex items-stretch overflow-x-auto gap-3 pb-6 snap-x snap-mandatory scrollbar-hide"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+                className="flex items-stretch gap-4 md:gap-6 pb-4 overflow-x-auto snap-x snap-mandatory"
+                style={{
+                  scrollbarWidth: "auto",
+                  msOverflowStyle: "auto",
+                }}
               >
-                {last10.map((entry, i) => (
-                  <div key={entry.id} className="snap-start shrink-0 w-[260px]">
-                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={true} totalEntries={entries.length} />
+                {last5.map((entry, i) => (
+                  <div key={entry.id} className="snap-start shrink-0 w-[280px] md:w-[320px] lg:w-[340px]">
+                    <JournalCard entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={false} totalEntries={entries.length} />
                   </div>
                 ))}
               </div>
-              {/* Hint arrow indicator */}
-              <div className="flex justify-center -mt-2 mb-2 animate-pulse">
-                <svg className="w-4 h-4 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Desktop: Grid layout */}
-            <div className={`hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 transition-all duration-700 ease-out delay-300 ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-              {last10.map((entry, i) => (
-                <JournalCard key={entry.id} entry={entry} index={i} visible={visible} isLatest={i === 0} onSelect={() => setSelectedEntry(entry)} isMobile={false} totalEntries={entries.length} />
-              ))}
+              {/* Visible scrollbar indicator — subtle line below */}
+              <div className="h-px bg-white/10 mt-2" />
             </div>
 
             {/* See more link */}
