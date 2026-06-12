@@ -8,6 +8,7 @@ import JournalModal from "./JournalModal";
 import { getTimeFormat } from "@/lib/settings/index";
 import { useInView } from "@/hooks/useInView";
 import { usePerPage } from "@/hooks/usePerPage";
+import { linkifyText } from "@/utils/linkify";
 
 const PER_PAGE = 8;
 
@@ -67,7 +68,7 @@ function JournalCard({ entry, index, visible, isLatest, number, onSelect }: { en
           {entry.title}
         </h3>
         <p className="text-[9px] sm:text-[10px] text-neutral-600 leading-relaxed mb-1.5 line-clamp-3">
-          {truncate(entry.content, 22)}
+          {linkifyText(truncate(entry.content, 22))}
         </p>
         <p className="text-[8px] sm:text-[9px] font-mono mb-3 text-black">
           - Enoch Chukwudi

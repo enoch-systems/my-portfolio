@@ -8,6 +8,7 @@ import Link from "next/link";
 import JournalModal from "./JournalModal";
 import { getTimeFormat } from "@/lib/settings/index";
 import { useInView } from "@/hooks/useInView";
+import { linkifyText } from "@/utils/linkify";
 
 const categoryStyles: Record<string, { label: string; color: string }> = {
   updates: { label: "updates", color: "border-black bg-black text-white" },
@@ -69,7 +70,7 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, tota
           </h3>
           {/* Content preview */}
           <p className="text-xs text-neutral-600 leading-relaxed mb-2 line-clamp-5">
-            {truncate(entry.content, 28)}
+            {linkifyText(truncate(entry.content, 28))}
           </p>
           <p className="text-[10px] font-mono mb-4 text-black">
             - Enoch Chukwudi
@@ -120,7 +121,7 @@ function JournalCard({ entry, index, visible, isLatest, onSelect, isMobile, tota
           {entry.title}
         </h3>
         <p className="text-xs md:text-sm text-neutral-600 leading-relaxed mb-3">
-          {truncate(entry.content, 30)}
+          {linkifyText(truncate(entry.content, 30))}
         </p>
         <p className="text-[10px] md:text-xs font-mono mb-5 pb-15 text-black">
           - Enoch Chukwudi

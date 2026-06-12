@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { X, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import type { JournalEntryRow } from "@/lib/data/index";
 import { getTimeFormat } from "@/lib/settings/index";
+import { linkifyText } from "@/utils/linkify";
 
 interface JournalModalProps {
   entry: JournalEntryRow | null;
@@ -152,13 +153,13 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
 
           {/* Summary — full text with preserved line breaks */}
           <div className="text-xs md:text-sm text-neutral-900 leading-relaxed mb-3">
-            {summaryParagraphs.map((p, i) => (
-              p ? (
-                <p key={i} className="mb-0">{p}</p>
-              ) : (
-                <br key={i} />
-              )
-            ))}
+              {summaryParagraphs.map((p, i) => (
+                p ? (
+                  <p key={i} className="mb-0">{linkifyText(p)}</p>
+                ) : (
+                  <br key={i} />
+                )
+              ))}
           </div>
 
           {/* Author — same as card */}
@@ -183,7 +184,7 @@ export default function JournalModal({ entry, onClose }: JournalModalProps) {
                 {contentParagraphs.map((p, i) => (
                   p ? (
                     <p key={i} className="text-xs md:text-sm text-neutral-900 leading-relaxed">
-                      {p}
+                      {linkifyText(p)}
                     </p>
                   ) : (
                     <div key={i} className="h-4" />
