@@ -1,0 +1,94 @@
+ENOCH CHUKWUDI
+Fullstack Engineer (Backend-Focused)
+
+Email: enochc.official@gmail.com | Phone: +234 916 291 9586
+Location: Nigeria (Remote) | WAT (UTC+1)
+LinkedIn: linkedin.com/in/enochchukwudi | GitHub: github.com/enoch-systems
+Portfolio: enochchukwudi.com
+
+
+PROFESSIONAL SUMMARY
+
+Backend-leaning fullstack developer focused on building real-world operational systems using modern web technologies. Experienced in designing APIs, business workflows, transaction systems, authentication flows, and scalable backend architectures paired with clean frontend execution. Specializes in fintech-style systems, logistics operations, fraud-aware workflows, and structured fullstack applications. Ships end-to-end systems across web apps, mobile apps, dashboards, and desktop software.
+
+
+TECHNICAL SKILLS
+
+Languages: TypeScript, JavaScript (ES6+), SQL, Python
+
+Frontend: Next.js (App Router, SSR, SSG, ISR, API Routes), React 19 (Hooks, Context, Client/Server Components), Flutter, Tailwind CSS v4, Lucide React
+
+Backend: Node.js, NestJS, Express.js, Hono, FastAPI, tRPC
+
+Databases: PostgreSQL, Supabase (PostgREST), Prisma, Drizzle ORM
+
+Caching & Storage: Redis, Cloudinary (image optimization, blur placeholders, transform pipelines)
+
+Auth: JWT, OAuth 2.0, Clerk, Auth0, Role-Based Access Control (RBAC)
+
+Payments & Integration: Stripe (idempotent payments, webhook verification), Resend (transactional email)
+
+Data Fetching: TanStack React Query (caching, stale time, background refetch)
+
+Background Jobs: BullMQ, Inngest, Puppeteer
+
+Monitoring: Sentry (error tracking), PostHog (analytics), OpenAI / Anthropic APIs (RAG pipelines)
+
+DevOps: Vercel, Docker, GitHub Actions, Turborepo, Git/GitHub, ESLint
+
+
+CORE COMPETENCIES
+
+Backend and API Design
+RESTful API architecture with versioning, middleware chains, and rate limiting. Real-time endpoints and webhook handler implementations. Event-driven design, dependency injection, and separation of concerns. Multi-tenant system architecture and business logic service modules.
+
+Data and Storage
+Database schema design, data modeling, and migration management. ORM vs raw SQL tradeoff analysis and query optimization. ACID transaction design, indexing strategy, and cache invalidation. File upload pipelines and image optimization workflows.
+
+Integration and Workflow
+Payment flow orchestration with idempotency guarantees. OAuth 2.0 authentication flows and webhook verification (HMAC). Background job processing with retry, backoff, and queue management. Third-party API synchronization and email pipeline automation.
+
+Infrastructure and DevOps
+CI/CD pipeline configuration and deployment automation. Serverless vs containerized deployment strategy and scalability planning. Zero-downtime deployment patterns and project scaffolding. Error tracking, structured logging, and monitoring pipeline setup.
+
+
+SYSTEM ARCHITECTURE APPROACH
+
+Thinks in architectural layers, applying the right tools and concepts at each level of the stack:
+
+1. Client Layer - Web apps, dashboards, mobile apps, admin panels
+2. Communication Layer - REST APIs, real-time endpoints, webhooks
+3. Logic Layer - Business logic, service modules, multi-tenant systems
+4. Data Access Layer - Data models, query layers, migrations
+5. Storage Layer - File uploads, image pipelines, caching layers
+6. Workflow Layer - Email pipelines, scheduled tasks, async processing
+7. Integration Layer - Payment flows, third-party syncs, webhook handlers
+8. Intelligence Layer - Error tracking, analytics, logging pipelines
+9. Architecture Layer - Project scaffolds, CI/CD, deployment configs
+
+
+PROJECT DOMAINS
+
+Engineering Systems
+End-to-end operational platforms built from the ground up. Fintech-style transaction systems, logistics visibility networks, fraud detection pipelines, credit intelligence platforms, merchant operating systems, cooperative banking solutions, supply chain networks, and core banking infrastructure. Focused on scalable backend architecture, database design, and API-first development.
+
+Client Systems
+Client-facing applications delivered as contracted engagements. Web applications, admin dashboards, mobile apps, and internal tools built to specification. Includes payment integrations, authentication flows, role-based access control, real-time data synchronization, and third-party API orchestration.
+
+Research and Architecture
+Exploration of emerging patterns and infrastructure design. Multi-tenant ERP architectures, workflow automation platforms, identity and access management systems, compliance and AML tooling, API governance frameworks, developer platform design, RAG pipelines, and observability systems. Focused on evaluating tradeoffs between serverless and containerized deployments, zero-downtime strategies, and scalability planning.
+
+
+KEY TECHNICAL CONCEPTS
+
+Type-safe database queries and ORM optimization. ACID transactions and indexing strategy design. Cache invalidation patterns and Redis caching layers. Job queue design with retry, backoff, and idempotency. Webhook verification using HMAC signatures. Idempotent payment processing with Stripe. Structured logging and error alerting pipelines. RAG (Retrieval-Augmented Generation) pipelines. Serverless vs containerized deployment tradeoffs. Zero-downtime deployment strategies. Image optimization with Cloudinary (f_auto, q_auto, blur placeholders). Environment variable management and graceful fallback patterns. Proxy pattern for mock client implementations. Provider pattern for context-based state management.
+
+
+NOTABLE IMPLEMENTATIONS
+
+Built a complete portfolio platform with Supabase backend, Cloudinary image pipeline, and Resend email integration using Next.js 16 App Router. Designed and implemented custom hooks for scroll-based intersection observation and pagination logic. Implemented TanStack React Query with stale time caching for optimized data fetching. Created responsive glassmorphism UI with Tailwind CSS v4 and custom animations. Designed PostgreSQL database migrations with trigger functions, constraint management, and automated timestamp updates. Built type-safe data layer with Supabase PostgREST, mapping database rows to TypeScript interfaces with full error handling.
+
+
+ENGINEERING PHILOSOPHY
+
+First principles over abstraction overload. Explicit system design over hidden magic. Business impact over feature volume. Maintainable structure over shortcuts. "I build systems that make money visible and operations predictable."

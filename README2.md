@@ -96,13 +96,17 @@ from client-facing interfaces down to infrastructure.
 
 ## Project Domains
 
-**African Market Systems**
-Operational platforms built for emerging markets.
-Logistics visibility, fraud detection networks, credit intelligence systems, merchant operating systems, cooperative banking platforms, supply chain networks, healthcare infrastructure, cross-border payment rails, government service automation.
+**Engineering Systems**
+End-to-end operational platforms built from the ground up.
+Fintech-style transaction systems, logistics visibility networks, fraud detection pipelines, credit intelligence platforms, merchant operating systems, cooperative banking solutions, supply chain networks, core banking infrastructure.
 
-**Global SaaS Infrastructure**
-Enterprise-grade platforms built for scale.
-Multi-tenant ERP, workflow automation, identity and access management, compliance and AML, API governance, real-time observability, developer platforms, contract lifecycle management, vendor risk systems, core banking infrastructure.
+**Client Systems**
+Client-facing applications delivered as contracted engagements.
+Web applications, admin dashboards, mobile apps, internal tools. Payment integrations, authentication flows, role-based access control, real-time data synchronization, third-party API orchestration.
+
+**Research and Architecture**
+Exploration of emerging patterns and infrastructure design.
+Multi-tenant ERP architectures, workflow automation platforms, identity and access management, compliance and AML tooling, API governance frameworks, developer platform design, RAG pipelines, observability systems.
 
 <br>
 
