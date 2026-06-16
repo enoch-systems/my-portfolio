@@ -57,14 +57,31 @@ SYSTEM ARCHITECTURE APPROACH
 Thinks in architectural layers, applying the right tools and concepts at each level of the stack:
 
 1. Client Layer - Web apps, dashboards, mobile apps, admin panels
+   Tools: Next.js, React, Flutter
+
 2. Communication Layer - REST APIs, real-time endpoints, webhooks
+   Tools: Express.js, Hono, FastAPI, tRPC
+
 3. Logic Layer - Business logic, service modules, multi-tenant systems
+   Tools: Node.js, NestJS, Next.js API Routes
+
 4. Data Access Layer - Data models, query layers, migrations
+   Tools: Prisma, Drizzle, Supabase (PostgREST)
+
 5. Storage Layer - File uploads, image pipelines, caching layers
+   Tools: PostgreSQL, Redis, Cloudinary
+
 6. Workflow Layer - Email pipelines, scheduled tasks, async processing
+   Tools: BullMQ, Inngest, Puppeteer
+
 7. Integration Layer - Payment flows, third-party syncs, webhook handlers
+   Tools: Stripe, Clerk / Auth0, Resend
+
 8. Intelligence Layer - Error tracking, analytics, logging pipelines
+   Tools: Sentry, PostHog, OpenAI / Anthropic APIs
+
 9. Architecture Layer - Project scaffolds, CI/CD, deployment configs
+   Tools: Vercel, Docker, GitHub Actions, Turborepo
 
 
 PROJECT DOMAINS
