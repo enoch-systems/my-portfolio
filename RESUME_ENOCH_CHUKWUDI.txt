@@ -56,31 +56,40 @@ SYSTEM ARCHITECTURE APPROACH
 
 Thinks in architectural layers, applying the right tools and concepts at each level of the stack:
 
-1. Client Layer - Web apps, dashboards, mobile apps, admin panels
+1. Client Layer
+   Skills: SSR / SSG / ISR, auth flows (JWT / OAuth2), role-based UI
    Tools: Next.js, React, Flutter
 
-2. Communication Layer - REST APIs, real-time endpoints, webhooks
+2. Communication Layer
+   Skills: Versioning, middleware chains, rate limiting, request validation
    Tools: Express.js, Hono, FastAPI, tRPC
 
-3. Logic Layer - Business logic, service modules, multi-tenant systems
+3. Logic Layer
+   Skills: Separation of concerns, event-driven design, dependency injection
    Tools: Node.js, NestJS, Next.js API Routes
 
-4. Data Access Layer - Data models, query layers, migrations
+4. Data Access Layer
+   Skills: ORM vs raw SQL tradeoffs, query optimization, type-safe queries
    Tools: Prisma, Drizzle, Supabase (PostgREST)
 
-5. Storage Layer - File uploads, image pipelines, caching layers
+5. Storage Layer
+   Skills: ACID transactions, indexing strategy, cache invalidation
    Tools: PostgreSQL, Redis, Cloudinary
 
-6. Workflow Layer - Email pipelines, scheduled tasks, async processing
+6. Workflow Layer
+   Skills: Job queues, retry and backoff, idempotency
    Tools: BullMQ, Inngest, Puppeteer
 
-7. Integration Layer - Payment flows, third-party syncs, webhook handlers
+7. Integration Layer
+   Skills: OAuth 2.0 flows, webhook verification (HMAC), idempotent payments
    Tools: Stripe, Clerk / Auth0, Resend
 
-8. Intelligence Layer - Error tracking, analytics, logging pipelines
+8. Intelligence Layer
+   Skills: Structured logging, error alerting, RAG pipelines
    Tools: Sentry, PostHog, OpenAI / Anthropic APIs
 
-9. Architecture Layer - Project scaffolds, CI/CD, deployment configs
+9. Architecture Layer
+   Skills: Serverless vs containerized, zero-downtime deploys, scalability planning
    Tools: Vercel, Docker, GitHub Actions, Turborepo
 
 
